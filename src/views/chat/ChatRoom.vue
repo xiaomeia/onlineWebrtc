@@ -250,8 +250,9 @@ function onSelect(name) {
             height: 1px;
             width: 812px;
             border-radius: 0 12px 12px 0;
-            color: #DDD;
+            background-color: #DDD;
             margin-top: 27px;
+            margin-left:20px;
         }
 
         .chat-content {
@@ -264,7 +265,7 @@ function onSelect(name) {
             position: relative;
 
             .chat-input-line {
-                color: #E7E8F0;
+                background-color: #E7E8F0;
                 width: 832px;
                 height: 1px;
                 border-radius: 0.5px;
@@ -274,7 +275,7 @@ function onSelect(name) {
             }
 
             .chat-input-icon {
-                margin-top: 25px;
+                padding-top: 25px;
                 margin-left: 17px;
 
                 .chat-input-icon-item {
