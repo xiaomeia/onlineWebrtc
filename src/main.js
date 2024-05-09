@@ -51,9 +51,6 @@ const config = {
   };
   
 const im = flooim(config);
-console.log(/gb123flooim/,flooim);
-console.log(/gb123im/,im);
-
 const app = createApp(App)
 app.provide('im', im) 
 

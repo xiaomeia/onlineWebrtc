@@ -11,15 +11,19 @@
             <div class="room-search">
                 <el-input v-model="input1" placeholder="查找联系人" :prefix-icon="Search" />
             </div>
-            <div class="room-list" v-for="item in roomList" :key="item.name">
+            <div class="room-list" v-for="item in roomList" :key="item.name" @click="onSelect(item.name)"
+                :class="{ 'selected': selectItem === item.name }">
                 <div class="room-list-item">
+                    <div class="select-line" v-show="item.name === selectItem" ></div>
                     <div class="room-list-item-top">
                         <div class="room-list-item-top-left">
                             <div>{{ item.name }}</div>
                             <div>{{ item.gender }}</div>
                             <div>{{ item.age }}</div>
                         </div>
-                        <div class="room-list-item-top-right">{{ item.status }}</div>
+                        <div class="room-list-item-top-right"
+                            :style="{ color: item.name === selectItem ? '#8F56F1' : '#ACAFBA' }">{{
+                                item.status }}</div>
                     </div>
                     <div class="room-list-item-bottom">
                         医生就诊时间： {{ item.time }}
@@ -105,6 +109,11 @@ const roomList = [
     }
 ]
 const im = inject('im');
+const selectItem = ref(roomList[0].name);
+function onSelect(name) {
+    selectItem.value = name;
+}
+
 // function handleClick() {
 //     if (im) {
 //         // 假设你已经有了 mobile, name, password 的值  
@@ -122,7 +131,8 @@ const im = inject('im');
     width: 1152px;
     margin-top: 20px;
     display: flex;
-    background-color:#F1F3F9;
+    background-color: #F1F3F9;
+
     .room-left {
         width: 320px;
         height: 1154px;
@@ -179,6 +189,15 @@ const im = inject('im');
                 padding-top: 20px;
                 margin-left: 20px;
                 width: 281px;
+                height: 80px;
+
+                .select-line {
+                    height: 80px;
+                    width: 4px;
+                    background-color:#C969EC;
+                    float: left;
+                    margin-left: -20px;
+                }
 
                 .room-list-item-top {
                     display: flex;
