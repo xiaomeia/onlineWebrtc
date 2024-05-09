@@ -42,7 +42,20 @@ import TreeSelect from '@/components/TreeSelect'
 // 字典标签组件
 import DictTag from '@/components/DictTag'
 
+
+const config = {
+  //dnsServer: "https://dns.lanyingim.com/v2/app_dns",
+  appid: "cvqclzuctmng",
+  ws: false, // uniapp版需要设置为true, web版需要设置为false
+  autoLogin: true
+  };
+  
+const im = flooim(config);
+console.log(/gb123flooim/,flooim);
+console.log(/gb123im/,im);
+
 const app = createApp(App)
+app.provide('im', im) 
 
 // 全局方法挂载
 app.config.globalProperties.useDict = useDict
@@ -53,6 +66,7 @@ app.config.globalProperties.handleTree = handleTree
 app.config.globalProperties.addDateRange = addDateRange
 app.config.globalProperties.selectDictLabel = selectDictLabel
 app.config.globalProperties.selectDictLabels = selectDictLabels
+app.config.globalProperties.$im = im; 
 
 // 全局组件挂载
 app.component('DictTag', DictTag)
