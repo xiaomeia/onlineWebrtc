@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128px" height="128px" viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 20</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icon" transform="translate(-1597.000000, -566.000000)">
+            <g id="编组-20" transform="translate(1580.753788, 561.753788)">
+                <rect id="矩形" fill="#979797" x="82.246212" y="119.246212" width="60" height="12" rx="6"></rect>
+                <g id="编组-19" transform="translate(74.246212, 74.246212) rotate(-45.000000) translate(-74.246212, -74.246212) translate(-2.753788, 46.246212)">
+                    <path d="M144,5 C145.380712,5 146.630712,5.55964406 147.535534,6.46446609 C148.440356,7.36928813 149,8.61928813 149,10 L149,10 L149,46 C149,47.3807119 148.440356,48.6307119 147.535534,49.5355339 C146.630712,50.4403559 145.380712,51 144,51 L144,51 L37.6883018,51 L5,29.316651 L5,26.683349 L37.6883018,5 Z" id="矩形" stroke="#979797" stroke-width="10"></path>
+                    <rect id="矩形" fill="#979797" x="40" y="0" width="10" height="56" rx="1"></rect>
+                    <rect id="矩形" fill="#979797" x="113" y="0" width="10" height="56" rx="1"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

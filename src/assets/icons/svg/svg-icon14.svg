@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128px" height="128px" viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 15</title>
+    <defs>
+        <linearGradient x1="97.9607852%" y1="5.0055476%" x2="2.64962903%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#D96BF4" offset="0%"></stop>
+            <stop stop-color="#AC63FB" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icon" transform="translate(-410.000000, -581.000000)">
+            <g id="编组-15" transform="translate(410.000000, 581.000000)">
+                <rect id="矩形" fill="url(#linearGradient-1)" x="0" y="0" width="128" height="128" rx="8"></rect>
+                <path d="M28,85 C23.581722,85 20,81.418278 20,77 L20,45 C20,39.4771525 24.4771525,35 30,35 C35.5228475,35 40,39.4771525 40,45 L40,65 L100,65 C104.418278,65 108,68.581722 108,73 L108,77 C108,81.418278 104.418278,85 100,85 L28,85 Z" id="形状结合" fill="#FFFFFF" transform="translate(64.000000, 60.000000) rotate(-45.000000) translate(-64.000000, -60.000000) "></path>
+            </g>
+        </g>
+    </g>
+</svg>

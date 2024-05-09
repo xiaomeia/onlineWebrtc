@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128px" height="128px" viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 23</title>
+    <defs>
+        <linearGradient x1="97.9607852%" y1="5.0055476%" x2="2.64962903%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#D96BF4" offset="0%"></stop>
+            <stop stop-color="#AC63FB" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icon" transform="translate(-514.000000, -739.000000)">
+            <g id="编组-22" transform="translate(514.000000, 739.000000)">
+                <circle id="椭圆形" fill="url(#linearGradient-1)" cx="64" cy="64" r="64"></circle>
+                <g id="编组-21" transform="translate(24.000000, 26.000000)">
+                    <path d="M46,4 C49.0375661,4 51.7875661,5.23121694 53.7781746,7.22182541 C55.7687831,9.21243388 57,11.9624339 57,15 L57,15 L57,18 L35,18 L35,15 C35,11.9624339 36.2312169,9.21243388 38.2218254,7.22182541 C40.2124339,5.23121694 42.9624339,4 46,4 L46,4 Z" id="矩形" stroke="#FFFFFF" stroke-width="8"></path>
+                    <rect id="矩形" stroke="#FFFFFF" stroke-width="8" x="4" y="18" width="72" height="50" rx="10"></rect>
+                    <circle id="椭圆形" stroke="#FFFFFF" stroke-width="8" cx="41" cy="41" r="8"></circle>
+                    <rect id="矩形" fill="#FFFFFF" x="16" y="5" width="8" height="16" rx="4"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

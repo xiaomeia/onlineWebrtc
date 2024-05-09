@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="129px" height="128px" viewBox="0 0 129 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 5</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icon" transform="translate(-1317.000000, -55.000000)">
+            <g id="编组-5" transform="translate(1317.000000, 63.000000)">
+                <rect id="矩形" stroke="#3F4552" stroke-width="10" x="5" y="5" width="118" height="102" rx="7.5"></rect>
+                <circle id="椭圆形" fill="#3F4552" cx="83" cy="30" r="10"></circle>
+                <polyline id="路径" stroke="#3F4552" stroke-width="10" points="5 85.5 36 55 65 88 89 64.5 124.5 101.5"></polyline>
+            </g>
+            <path d="M1422,214 C1428.62742,214 1434,219.372583 1434,226 L1434,286 L1494,286 C1500.62742,286 1506,291.372583 1506,298 C1506,304.627417 1500.62742,310 1494,310 L1434,310 L1434,370 C1434,376.627417 1428.62742,382 1422,382 C1415.37258,382 1410,376.627417 1410,370 L1410,310 L1350,310 C1343.37258,310 1338,304.627417 1338,298 C1338,291.372583 1343.37258,286 1350,286 L1410,286 L1410,226 C1410,219.372583 1415.37258,214 1422,214 Z" id="形状结合" fill="#999999" transform="translate(1422.000000, 298.000000) rotate(45.000000) translate(-1422.000000, -298.000000) "></path>
+        </g>
+    </g>
+</svg>

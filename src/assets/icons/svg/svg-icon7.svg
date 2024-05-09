@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128px" height="128px" viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 6</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icon" transform="translate(-1651.000000, -59.000000)" fill="#3F4552">
+            <g id="编组-6" transform="translate(1665.000000, 59.000000)">
+                <path d="M95,52 C97.7614237,52 100,53.790861 100,56 L100,56 C100,83.6142375 77.6142375,106 50,106 C22.3857625,106 0,83.6142375 0,56 L0.00544221056,55.8117016 C0.128345457,53.689988 2.31747407,52 5,52 C7.76142375,52 10,53.790861 10,56 L10,56 C10,78.09139 27.90861,96 50,96 C72.09139,96 90,78.09139 90,56 L90.0054422,55.8117016 C90.1283455,53.689988 92.3174741,52 95,52 Z" id="形状结合"></path>
+                <rect id="矩形" x="43" y="103" width="14" height="14"></rect>
+                <rect id="矩形" x="15" y="114" width="70" height="14" rx="7"></rect>
+                <rect id="矩形" x="22" y="0" width="56" height="82" rx="28"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

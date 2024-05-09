@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128px" height="128px" viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 18</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icon" transform="translate(-1424.000000, -569.000000)">
+            <g id="编组-18" transform="translate(1424.000000, 569.000000)">
+                <circle id="椭圆形" fill="#999999" cx="64" cy="64" r="64"></circle>
+                <path d="M64,30 C69.5228475,30 74,34.4771525 74,40 L74,53.999 L88,54 C93.5228475,54 98,58.4771525 98,64 C98,69.5228475 93.5228475,74 88,74 L74,74 L74,88 C74,93.5228475 69.5228475,98 64,98 C58.4771525,98 54,93.5228475 54,88 L54,74 L40,74 C34.4771525,74 30,69.5228475 30,64 C30,58.4771525 34.4771525,54 40,54 L54,54 L54,40 C54,34.4771525 58.4771525,30 64,30 Z" id="形状结合" fill="#FFFFFF"></path>
+            </g>
+        </g>
+    </g>
+</svg>

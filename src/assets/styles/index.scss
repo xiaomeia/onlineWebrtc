@@ -1,0 +1,300 @@
+@import "./variables.module.scss";
+@import "./mixin.scss";
+@import "./transition.scss";
+@import "./element-ui.scss";
+@import "./sidebar.scss";
+@import "./btn.scss";
+@import "./ruoyi.scss";
+
+body {
+  height: 100%;
+  margin: 0;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB,
+    Microsoft YaHei, Arial, sans-serif;
+}
+
+label {
+  font-weight: 700;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+#app {
+  height: 100%;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+.no-padding {
+  padding: 0px !important;
+}
+
+.padding-content {
+  padding: 4px 0;
+}
+
+a:focus,
+a:active {
+  outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
+div:focus {
+  outline: none;
+}
+
+.fr {
+  float: right;
+}
+
+.fl {
+  float: left;
+}
+
+.pr-5 {
+  padding-right: 5px;
+}
+
+.pl-5 {
+  padding-left: 5px;
+}
+
+.block {
+  display: block;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.inlineBlock {
+  display: block;
+}
+
+.clearfix {
+  &:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+  }
+}
+
+aside {
+  background: #eef1f6;
+  padding: 8px 24px;
+  margin-bottom: 20px;
+  border-radius: 2px;
+  display: block;
+  line-height: 32px;
+  font-size: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  color: #2c3e50;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  a {
+    color: #337ab7;
+    cursor: pointer;
+
+    &:hover {
+      color: rgb(32, 160, 255);
+    }
+  }
+}
+
+//main-container全局样式
+.app-container {
+  padding: 20px;
+}
+
+.components-container {
+  margin: 30px 50px;
+  position: relative;
+}
+
+.pagination-container {
+  margin-top: 30px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.sub-navbar {
+  height: 50px;
+  line-height: 50px;
+  position: relative;
+  width: 100%;
+  text-align: right;
+  padding-right: 20px;
+  transition: 600ms ease position;
+  background: linear-gradient(
+    90deg,
+    rgba(32, 182, 249, 1) 0%,
+    rgba(32, 182, 249, 1) 0%,
+    rgba(33, 120, 241, 1) 100%,
+    rgba(33, 120, 241, 1) 100%
+  );
+
+  .subtitle {
+    font-size: 20px;
+    color: #fff;
+  }
+
+  &.draft {
+    background: #d0d0d0;
+  }
+
+  &.deleted {
+    background: #d0d0d0;
+  }
+}
+
+.link-type,
+.link-type:focus {
+  color: #337ab7;
+  cursor: pointer;
+
+  &:hover {
+    color: rgb(32, 160, 255);
+  }
+}
+
+.filter-container {
+  padding-bottom: 10px;
+
+  .filter-item {
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 10px;
+  }
+}
+
+//refine vue-multiselect plugin
+.multiselect {
+  line-height: 16px;
+}
+
+.multiselect--active {
+  z-index: 1000 !important;
+}
+
+.liner-btn {
+  border: 0 !important;
+  color: #ffffff !important;
+  background: linear-gradient(45deg, #9357f2, #c969ec);
+}
+.plain-btn {
+  border: 1px solid #8F56F1 !important;
+  color: #8F56F1 !important;
+  background: #fff !important;
+  padding: 15px 35px !important;
+}
+.tool-btn {
+  padding: 15px 38px !important;
+  height: 40px !important;
+}
+.btn-group {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+
+.search-box {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 15px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-box .el-form-item {
+  margin-bottom: 0;
+  margin-right: 20px !important;
+}
+
+.screen-list {
+  display: flex;
+  padding: 25px 20px;
+  border-radius: 12px;
+  margin-top: 20px;
+  list-style: none;
+  background-color: #ffffff;
+  justify-content: flex-start;
+  &.flex {
+    display: flex;
+  }
+  &.space-between {
+    justify-content: space-between;
+  }
+  li {
+    width: 166px;
+    height: 50px;
+    border-radius: 4px;
+    line-height: 50px;
+    text-align: center;
+    color: #121212;
+    margin-right: 20px;
+    cursor: pointer;
+    background-color: #f5f2f9;
+    span {
+      color: #8f56f1;
+    }
+    &.active {
+      color: #ffffff !important;
+      background: linear-gradient(45deg, #9357f2, #c969ec);
+      span {
+        color: #ffffff;
+      }
+    }
+  }
+}
+.input-item {
+  padding: 6px 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  .el-input__wrapper {
+    background: transparent;
+    box-shadow: none;
+  }
+  .el-input__wrapper input {
+    border: 0;
+    outline: none;
+  }
+  .el-select {
+    --el-select-border-color-hover: 0;
+    --el-select-input-focus-border-color: 0;
+  }
+}
+.el-pagination.is-background .el-pager li:not(.is-disabled).is-active {
+  background: linear-gradient(45deg, #9357F2, #C969EC);
+}
+.el-checkbox__input.is-checked .el-checkbox__inner {
+  background: linear-gradient(45deg, #9357F2, #C969EC);
+  border-color: #C969EC !important;
+}
+.el-checkbox__input.is-checked+.el-checkbox__label {
+  color: #333 !important;
+}
