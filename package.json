@@ -13,6 +13,8 @@
   "dependencies": {
     "@element-plus/icons-vue": "2.0.10",
     "@vueuse/core": "9.5.0",
+    "aliyun-rtc-sdk": "^6.11.3-beta.5",
+    "aliyun-webrtc-sdk": "^1.17.3",
     "axios": "0.27.2",
     "dingrtc": "^3.0.1",
     "echarts": "5.4.0",

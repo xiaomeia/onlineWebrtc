@@ -4,6 +4,7 @@ import Cookies from 'js-cookie'
 
 import ElementPlus from 'element-plus'
 import locale from 'element-plus/lib/locale/lang/zh-cn' // 中文语言
+import AliRtcEngine from 'aliyun-rtc-sdk';
 
 import '@/assets/styles/index.scss' // global css
 
@@ -42,7 +43,13 @@ import TreeSelect from '@/components/TreeSelect'
 // 字典标签组件
 import DictTag from '@/components/DictTag'
 
+const checkResult = await AliRtcEngine.isSupported();
+if (!checkResult.support) {
+  // 当前环境不支持使用，提示用户更换或升级浏览器
+}
 
+// 创建引擎实例，可以保存至全局变量中
+const aliRtcEngine = AliRtcEngine.getInstance();
 const config = {
   //dnsServer: "https://dns.lanyingim.com/v2/app_dns",
   appid: "cvqclzuctmng",

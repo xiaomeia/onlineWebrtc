@@ -8,6 +8,7 @@ export function listsTask(query) {
     params: query
   })
 }
+//视频接诊
 export function videoTask(id) {
   return request({
     url: '/reception/videl/' + id,
