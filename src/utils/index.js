@@ -388,3 +388,28 @@ export function isNumberStr(str) {
   return /^[+-]?(0|([1-9]\d*))(\.\d+)?$/g.test(str)
 }
  
+export function toNumber (obj = 0) {
+  if (typeof obj === 'string') {
+    return obj - 0;
+  }
+  if (typeof obj === 'number') {
+    return obj;
+  }
+  const { low, high, unsigned = true } = obj;
+  if (typeof low !== 'undefined' && high !== 'undefined') {
+    return new Long(low, high, unsigned).toNumber();
+  }
+};
+
+export function numToString (obj = 0) {
+
+  if (typeof obj === 'undefined') {
+    ('');
+  }
+  if (typeof obj === 'string') return obj;
+  if (typeof obj === 'number') return obj + '';
+  if (typeof obj.low !== 'undefined' && typeof obj.high !== 'undefined') {
+    return new Long(obj.low, obj.high, true).toString();
+  }
+  return new Long(obj).toString();
+};
