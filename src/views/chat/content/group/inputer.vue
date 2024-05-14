@@ -20,6 +20,9 @@
 
 <script>
 // import { mapGetters } from 'vuex';
+import { useMainStore } from "@/store/modules/index";
+
+const mainStore = useMainStore();
 
 export default {
   name: 'rosterInputer',
@@ -34,9 +37,9 @@ export default {
   },
   components: {},
   computed: {
-    ...mapGetters('content', ['getSid', 'getMemberList']),
+    // ...mapGetters('content', ['getSid', 'getMemberList']),
     im() {
-      return proxy.flooIm;
+      return mainStore.getIm;
     }
   },
   methods: {

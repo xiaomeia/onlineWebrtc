@@ -302,63 +302,63 @@ export const useCollectionStore = defineStore('collection', {
       this.contactStatus = x;
     },
 
-    getConversationList() {
-      const convlist = this.userManage.getConversationList();
-      const allGroupMap = this.groupManage.getAllGroupDetail();
-      const allRosterMap = this.rosterManage.getAllRosterDetail() || {};
-      let totalUnreadCount = 0;
+    // getConversationList() {
+    //   const convlist = this.userManage.getConversationList();
+    //   const allGroupMap = this.groupManage.getAllGroupDetail();
+    //   const allRosterMap = this.rosterManage.getAllRosterDetail() || {};
+    //   let totalUnreadCount = 0;
       
-      const convData = convlist.map((item, index) => {
-        let name;
-        const id = item.id;
-        const content = item.content;
-        const timestamp = item.timestamp;
-        let avatar = '';
-        const unreadCount = item.type == 'roster' ? this.rosterManage.getUnreadCount(id) : this.groupManage.getUnreadCount(id);
-        const unread = unreadCount > 0 ? unreadCount : 0;
-        totalUnreadCount += unread;
+    //   const convData = convlist.map((item, index) => {
+    //     let name;
+    //     const id = item.id;
+    //     const content = item.content;
+    //     const timestamp = item.timestamp;
+    //     let avatar = '';
+    //     const unreadCount = item.type == 'roster' ? this.rosterManage.getUnreadCount(id) : this.groupManage.getUnreadCount(id);
+    //     const unread = unreadCount > 0 ? unreadCount : 0;
+    //     totalUnreadCount += unread;
         
-        if (item.type === 'roster') {
-          const sroster = allRosterMap[id] || {};
-          name = sroster.alias || sroster.nick_name || sroster.username || id;
-          avatar = sroster.avatar;
-        } else if (item.type === 'group') {
-          const sgroup = allGroupMap[id] || {};
-          name = sgroup.name || id;
-          avatar = sgroup.avatar;
-        }
+    //     if (item.type === 'roster') {
+    //       const sroster = allRosterMap[id] || {};
+    //       name = sroster.alias || sroster.nick_name || sroster.username || id;
+    //       avatar = sroster.avatar;
+    //     } else if (item.type === 'group') {
+    //       const sgroup = allGroupMap[id] || {};
+    //       name = sgroup.name || id;
+    //       avatar = sgroup.avatar;
+    //     }
         
-        avatar = this.sysManage.getImage({
-          avatar,
-          type: item.type === 'roster' ? 'roster' : 'group'
-        });
+    //     avatar = this.sysManage.getImage({
+    //       avatar,
+    //       type: item.type === 'roster' ? 'roster' : 'group'
+    //     });
         
-        return {
-          type: item.type,
-          index,
-          name,
-          content,
-          timestamp,
-          avatar,
-          unread,
-          sid: id
-        };
-      });
+    //     return {
+    //       type: item.type,
+    //       index,
+    //       name,
+    //       content,
+    //       timestamp,
+    //       avatar,
+    //       unread,
+    //       sid: id
+    //     };
+    //   });
 
-      const sortedConvList = convData.sort((a, b) => {
-        return a.timestamp < b.timestamp ? 1 : a.timestamp > b.timestamp ? -1 : 0;
-      });
+    //   const sortedConvList = convData.sort((a, b) => {
+    //     return a.timestamp < b.timestamp ? 1 : a.timestamp > b.timestamp ? -1 : 0;
+    //   });
       
-      this.conversationList = sortedConvList;
+    //   this.conversationList = sortedConvList;
       
-      if (totalUnreadCount > 99) {
-        this.totalUnread = '99+';
-      } else if (totalUnreadCount > 0) {
-        this.totalUnread = totalUnreadCount.toString();
-      } else {
-        this.totalUnread = '';
-      }
-    },
+    //   if (totalUnreadCount > 99) {
+    //     this.totalUnread = '99+';
+    //   } else if (totalUnreadCount > 0) {
+    //     this.totalUnread = totalUnreadCount.toString();
+    //   } else {
+    //     this.totalUnread = '';
+    //   }
+    // },
 
     async lazyGetRosterList() {
       if (!this.rosterList.length && !contactRequestFlag.rosterList) {

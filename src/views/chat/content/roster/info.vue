@@ -49,7 +49,7 @@ export default {
   mounted() {
     this.refreshUserInfo(this.getSid);
 
-    proxy.flooIm.on('onRosterInfoUpdate', (ids) => {
+    mainStore.getIm.on('onRosterInfoUpdate', (ids) => {
       if (Array.isArray(ids) && ids.includes(this.getSid)) {
         this.refreshUserInfo(this.getSid);
       }
@@ -62,8 +62,8 @@ export default {
   },
   components: {},
   computed: {
-    ...mapGetters('content', ['getSid']),
-    ...mapGetters('contact', ['getRosterList']),
+    // ...mapGetters('content', ['getSid']),
+    // ...mapGetters('contact', ['getRosterList']),
     rosterName() {
       return this.userInfo.username;
     },
@@ -74,7 +74,7 @@ export default {
       return this.userInfo.nick_name;
     },
     token() {
-      return proxy.flooIm.userManage.getToken();
+      return mainStore.getIm.userManage.getToken();
     },
     isFriend() {
       const index = this.getRosterList.findIndex((x) => x.user_id === this.getSid);
@@ -83,8 +83,8 @@ export default {
   },
   methods: {
     refreshUserInfo(newSid) {
-      proxy.flooIm.rosterManage.asyncSearchRosterById({ user_id: newSid }).then((res) => {
-        res.avatar = proxy.flooIm.sysManage.getImage({
+      mainStore.getIm.rosterManage.asyncSearchRosterById({ user_id: newSid }).then((res) => {
+        res.avatar = mainStore.getIm.sysManage.getImage({
           avatar: res.avatar,
           type: 'roster'
         });
@@ -92,7 +92,7 @@ export default {
       });
     },
     setRosterAlias() {
-      const im = proxy.flooIm;
+      const im = mainStore.getIm;
       this.$prompt('请输入别名', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消'
@@ -112,17 +112,17 @@ export default {
         .catch(() => {});
     },
     chatRemoveHandler() {
-      proxy.flooIm.rosterManage.asyncDeleteRoster({ user_id: this.getSid }).then(() => {
+      mainStore.getIm.rosterManage.asyncDeleteRoster({ user_id: this.getSid }).then(() => {
         alert('好友已删除');
       });
 
       const also_delete_other_devices = true;
-      proxy.flooIm.sysManage.deleteConversation(this.getSid, also_delete_other_devices);
+      mainStore.getIm.sysManage.deleteConversation(this.getSid, also_delete_other_devices);
     },
     addFriendHandler() {
       const { user_id, username } = this.userInfo;
       const alias = username;
-      proxy.flooIm.rosterManage.asyncApply({ user_id, alias }).then(() => {
+      mainStore.getIm.rosterManage.asyncApply({ user_id, alias }).then(() => {
         alert('请求已发送成功!');
       });
     },

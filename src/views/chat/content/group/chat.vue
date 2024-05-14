@@ -14,6 +14,9 @@
 import Message from './renderMsg.vue';
 import { numToString, toNumber } from '@/utils/index';
 import { useChatviewStore } from '@/store/modules/content';
+import { useMainStore } from "@/store/modules/index";
+
+const mainStore = useMainStore();
 // import { mapGetters } from 'vuex';
 // var JSONBigString = require('json-bigint');
 
@@ -24,11 +27,11 @@ export default {
     this.requireMessage();
     this.scroll();
 
-    proxy.flooIm.on('onGroupMessage', (message) => {
+    mainStore.getIm.on('onGroupMessage', (message) => {
       this.reloadMessage(message);
     });
 
-    proxy.flooIm.on('onGroupMessageContentAppend', (message) => {
+    mainStore.getIm.on('onGroupMessageContentAppend', (message) => {
       if (this.$refs.vMessages) {
         let msg = this.$refs.vMessages.reverse().find((item) => item.message.id == message.id);
         if (msg) {
@@ -38,7 +41,7 @@ export default {
       }
     });
 
-    proxy.flooIm.on('onGroupMessageReplace', (message) => {
+    mainStore.getIm.on('onGroupMessageReplace', (message) => {
       if (this.$refs.vMessages) {
         let msg = this.$refs.vMessages.reverse().find((item) => item.message.id == message.id);
         if (msg) {
@@ -50,7 +53,7 @@ export default {
       }
     });
 
-    proxy.flooIm.on('onReceiveHistoryMsg', ({ next }) => {
+    mainStore.getIm.on('onReceiveHistoryMsg', ({ next }) => {
       this.queryingHistory = false;
       chatviewStore.actionAppendMessage({
         history: true,
@@ -63,26 +66,26 @@ export default {
       !this.getMessages.length && this.scroll();
     });
 
-    proxy.flooIm.on('onMessageStatusChanged', ({ mid }) => {
+    mainStore.getIm.on('onMessageStatusChanged', ({ mid }) => {
       console.log('Message status changed, mid: ', mid);
       this.requireMessage();
     });
 
-    proxy.flooIm.on('onSendingMessageStatusChanged', ({ status, mid }) => {
+    mainStore.getIm.on('onSendingMessageStatusChanged', ({ status, mid }) => {
       console.log('Sending Message status changed to ', status, ' mid: ', mid);
       // this.requireMessage();
     });
 
-    proxy.flooIm.on('onMessageRecalled', ({ mid }) => {
+    mainStore.getIm.on('onMessageRecalled', ({ mid }) => {
       this.deleteMessage(mid);
     });
 
-    proxy.flooIm.on('onMessageDeleted', ({ mid }) => {
+    mainStore.getIm.on('onMessageDeleted', ({ mid }) => {
       this.deleteMessage(mid);
     });
 
-    proxy.flooIm.on('onMessageCanceled', (message) => {
-      const uid = proxy.flooIm.userManage.getUid();
+    mainStore.getIm.on('onMessageCanceled', (message) => {
+      const uid = mainStore.getIm.userManage.getUid();
       if (uid + '' === message.uid + '') {
         this.requireMessage();
       }
@@ -90,7 +93,7 @@ export default {
   },
 
   destroyed() {
-    const im = proxy.flooIm;
+    const im = mainStore.getIm;
     if (!im) return;
 
     im.off({
@@ -120,9 +123,9 @@ export default {
   },
 
   computed: {
-    ...mapGetters('content', ['getSid', 'getMessages', 'getMessageTime', 'getScroll']),
+    // // ...mapGetters('content', ['getSid', 'getMessages', 'getMessageTime', 'getScroll']),
     im() {
-      return proxy.flooIm;
+      return mainStore.getIm;
     },
     allMessages() {
       const msgs = this.getMessages || [];
@@ -206,10 +209,10 @@ export default {
     reloadMessage(message) {
       const toUid = toNumber(message.to);
       const pid = this.getSid;
-      const uid = proxy.flooIm.userManage.getUid();
+      const uid = mainStore.getIm.userManage.getUid();
       if (toUid === pid) {
         if (uid + '' !== message.from + '') {
-          proxy.flooIm.groupManage.readGroupMessage(this.getSid);
+          mainStore.getIm.groupManage.readGroupMessage(this.getSid);
         }
         this.requireMessage();
         if (message.ext && !message.isHistory) {

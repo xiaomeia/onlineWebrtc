@@ -34,7 +34,7 @@ export default {
     Forward
   },
   computed: {
-    ...mapGetters('content', ['getSid', 'getMessages', 'getMessageTime'])
+    // ...mapGetters('content', ['getSid', 'getMessages', 'getMessageTime'])
   },
   methods: {
     requireUserInfo() {

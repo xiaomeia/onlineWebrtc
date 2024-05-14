@@ -49,6 +49,9 @@
 import { useChatviewStore } from '@/store/modules/content';
 import { useCollectionStore } from '@/store/modules/contact';
 import { useHeaderStore } from '@/store/modules/header';
+import { useMainStore } from "@/store/modules/index";
+
+const mainStore = useMainStore();
 
 const chatviewStore = useChatviewStore();
 const collectionStore = useCollectionStore();
@@ -77,10 +80,10 @@ export default {
   },
 
   computed: {
-    ...mapGetters('contact', ['getRosterList', 'getGroupList']),
+    // // ...mapGetters('contact', ['getRosterList', 'getGroupList']),
 
     token() {
-      return proxy.flooIm.userManage.getToken();
+      return mainStore.getIm.userManage.getToken();
     }
   },
 
@@ -148,7 +151,7 @@ export default {
     },
     asyncGetStatics: function () {
       // const im = this.getApp().getIM();
-      proxy.flooIm.sysManage.asyncGetStaticContact().then((res) => {
+      mainStore.getIm.sysManage.asyncGetStaticContact().then((res) => {
         res = res.map((x) => {
           x.avatar = im.sysManage.getImage({
             avatar: x.avatar,

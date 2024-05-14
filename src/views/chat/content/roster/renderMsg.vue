@@ -124,7 +124,7 @@ export default {
     };
   },
   mounted() {
-    const im = proxy.flooIm;
+    const im = mainStore.getIm;
     if (!im) return;
 
     let { timestamp } = this.message;
@@ -138,10 +138,10 @@ export default {
 
     // Message displayed as read
     const fromUid = toNumber(this.message.from);
-    const uid = proxy.flooIm.userManage.getUid();
+    const uid = mainStore.getIm.userManage.getUid();
     if (fromUid !== uid) {
       //do not read message sent by oneself
-      const im = proxy.flooIm;
+      const im = mainStore.getIm;
       if (im) im.rosterManage.readRosterMessage(this.getSid, this.message.id);
     }
     let { type } = this.message;
@@ -166,7 +166,7 @@ export default {
   },
   props: ['message'],
   computed: {
-    ...mapGetters('content', ['getSid', 'getMessageTime']),
+    // ...mapGetters('content', ['getSid', 'getMessageTime']),
     timeMessage() {
       let { timestamp } = this.message;
       timestamp = toNumber(timestamp);
@@ -180,7 +180,7 @@ export default {
       return '';
     },
     im() {
-      return proxy.flooIm;
+      return mainStore.getIm;
     },
     token() {
       return this.im.userManage.getToken();

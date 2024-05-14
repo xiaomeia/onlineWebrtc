@@ -25,7 +25,7 @@ export default {
     this.requireMessage();
     this.scroll();
 
-    const im = proxy.flooIm;
+    const im = mainStore.getIm;
     if (!im) return;
 
     im.on('onRosterMessage', (message) => {
@@ -72,7 +72,7 @@ export default {
       this.requireMessage();
     });
 
-    proxy.flooIm.on('onSendingMessageStatusChanged', ({ status, mid }) => {
+    mainStore.getIm.on('onSendingMessageStatusChanged', ({ status, mid }) => {
       console.log('Sending Message status changed to ', status, ' mid: ', mid);
       // this.requireMessage();
     });
@@ -86,7 +86,7 @@ export default {
     });
 
     im.on('onMessageCanceled', (message) => {
-      const uid = proxy.flooIm.userManage.getUid();
+      const uid = mainStore.getIm.userManage.getUid();
       if (uid + '' === message.uid + '') {
         this.requireMessage();
       }
@@ -94,7 +94,7 @@ export default {
   },
 
   destroyed() {
-    const im = proxy.flooIm;
+    const im = mainStore.getIm;
     if (!im) return;
 
     im.off({
@@ -123,7 +123,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('content', ['getSid', 'getMessages', 'getMessageTime', 'getScroll']),
+    // ...mapGetters('content', ['getSid', 'getMessages', 'getMessageTime', 'getScroll']),
     allMessages() {
       let msgs = this.getMessages || [];
       msgs = msgs.filter((item) => {
@@ -165,7 +165,7 @@ export default {
     reloadFirstMessage(message) {
       const fromUid = toNumber(message.from);
       const toUid = toNumber(message.to);
-      const uid = proxy.flooIm.userManage.getUid();
+      const uid = mainStore.getIm.userManage.getUid();
       const cid = fromUid === uid ? toUid : fromUid;
 
       let needReload = true;
@@ -206,14 +206,14 @@ export default {
     },
 
     reloadMessage(message) {
-      const uid = proxy.flooIm.userManage.getUid();
+      const uid = mainStore.getIm.userManage.getUid();
       const toUid = toNumber(message.to);
       const fromUid = toNumber(message.from);
       const pid = this.getSid;
       if ((uid === toUid && fromUid === pid) || (uid === fromUid && toUid === pid)) {
         if (fromUid !== uid) {
           //do not read message sent by oneself
-          proxy.flooIm.rosterManage.readRosterMessage(this.getSid, message.id);
+          mainStore.getIm.rosterManage.readRosterMessage(this.getSid, message.id);
         }
         this.requireMessage();
         if (message.ext && !message.isHistory) {

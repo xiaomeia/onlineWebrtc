@@ -2,6 +2,10 @@ import { createApp } from "vue";
 
 import Cookies from "js-cookie";
 
+import '@vue/compat'
+
+import '@/css/index.css';
+
 import ElementPlus from "element-plus";
 import locale from "element-plus/lib/locale/lang/zh-cn"; // 中文语言
 
@@ -48,8 +52,6 @@ import TreeSelect from "@/components/TreeSelect";
 // 字典标签组件
 import DictTag from "@/components/DictTag";
 
-import flooim from "@/im/floo-3.0.0.js";
-
 const app = createApp(App);
 
 // 全局方法挂载
@@ -61,15 +63,6 @@ app.config.globalProperties.handleTree = handleTree;
 app.config.globalProperties.addDateRange = addDateRange;
 app.config.globalProperties.selectDictLabel = selectDictLabel;
 app.config.globalProperties.selectDictLabels = selectDictLabels;
-
-// 挂载一个聊天方法到全局
-const config = {
-  //dnsServer: "https://dns.lanyingim.com/v2/app_dns",
-  appid: "dhqtxhnsglwy",
-  ws: false, // uniapp版需要设置为true, web版需要设置为false
-  autoLogin: true,
-};
-app.config.globalProperties.flooIm = flooim(config)
 
 // 全局组件挂载
 app.component("DictTag", DictTag);

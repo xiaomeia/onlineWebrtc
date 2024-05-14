@@ -33,7 +33,7 @@ export default {
   name: 'contentIndex',
   components: {
     RosterInfo,
-    GroupInfo,
+    // GroupInfo,
     // RosterChat,
     // GroupChat,
     Setting,
@@ -42,7 +42,7 @@ export default {
     GroupApplyNotice
   },
   computed: {
-    ...mapGetters('chat', ['getViewType'])
+    // ...mapGetters('chat', ['getViewType'])
   },
   methods: {}
 };

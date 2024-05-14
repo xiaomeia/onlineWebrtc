@@ -51,7 +51,7 @@
 // };
 
 // settingStore.js
-import { defineStore } from 'pinia';
+// import { defineStore } from 'pinia';
 
 export const useSettingStore = defineStore('setting', {
   state: () => ({

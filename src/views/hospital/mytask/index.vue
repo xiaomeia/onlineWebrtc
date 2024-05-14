@@ -195,6 +195,7 @@ import {
   overReception,
   countReception,
 } from "@/api/hospital/mytask";
+import flooim from "@/im/floo-3.0.0.js";
 import { onMounted } from "vue";
 const { proxy } = getCurrentInstance();
 const router = useRouter();
@@ -250,28 +251,46 @@ const data = reactive({
 });
 
 const { queryParams, form, rules } = toRefs(data);
+import { useMainStore } from "@/store/modules/index";
+
+const mainStore = useMainStore();
 
 onMounted(() => {
-  proxy.flooIm.on({
+  // 挂载一个聊天方法到全局
+  const config = {
+    //dnsServer: "https://dns.lanyingim.com/v2/app_dns",
+    appid: "dhqtxhnsglwy",
+    ws: false, // uniapp版需要设置为true, web版需要设置为false
+    autoLogin: true,
+  };
+
+  const im = flooim(config);
+  mainStore.actionSaveIm(im);
+  mainStore.getIm.on({
     loginSuccess: () => {
       console.log("run loginSuccess");
     },
     loginFail: (msg) => {
       console.log("登陆失败, error: " + msg);
     },
-    loginMessage: message => {console.log('登录信息相关的----', message)}
+    loginMessage: (message) => {
+      console.log("登录信息相关的----", message);
+    },
   });
 });
 
-function Register () {
-  proxy.flooIm.userManage.asyncRegister({
-    username: "admin",
-    password: "123456",
-  }).then(() => {
-  console.log("注册成功");
-}).catch(ex => {
-  console.log(ex.message);
-});
+function Register() {
+  mainStore.getIm.userManage
+    .asyncRegister({
+      username: "admin",
+      password: "123456",
+    })
+    .then(() => {
+      console.log("注册成功");
+    })
+    .catch((ex) => {
+      console.log(ex.message);
+    });
 }
 
 /** 查询公告列表 */
@@ -372,7 +391,7 @@ function saveLoginInfo(info) {
 }
 
 function imLogin({ name, password }) {
-  proxy.flooIm.login({
+  mainStore.getIm.login({
     name,
     password,
   });

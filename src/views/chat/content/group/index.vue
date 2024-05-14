@@ -18,6 +18,10 @@ import MemberList from './memberList';
 import { useChatviewStore } from '@/store/modules/content';
 const chatviewStore = useChatviewStore();
 
+import { useMainStore } from "@/store/modules/index";
+
+const mainStore = useMainStore();
+
 // import { mapGetters } from 'vuex';
 
 export default {
@@ -32,7 +36,7 @@ export default {
     chatviewStore.actionOpenGroup()
     // this.$store.dispatch('content/actionOpenGroup');
 
-    proxy.flooIm.on('onGroupMemberChanged', (/*gid*/) => {
+    mainStore.getIm.on('onGroupMemberChanged', (/*gid*/) => {
       chatviewStore.actionUpdateMemberList()
       // this.$store.dispatch('content/actionUpdateMemberList');
     });
@@ -45,7 +49,7 @@ export default {
     MemberList
   },
   computed: {
-    ...mapGetters('content', ['getSid', 'getMessages', 'getMessageTime'])
+    // ...mapGetters('content', ['getSid', 'getMessages', 'getMessageTime'])
   },
   methods: {
     requireGroups() {

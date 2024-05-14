@@ -22,6 +22,10 @@ const chatviewStore = useChatviewStore();
 const collectionStore = useCollectionStore();
 const headerStore = useHeaderStore();
 
+import { useMainStore } from "@/store/modules/index";
+
+const mainStore = useMainStore();
+
 export default {
   name: 'GroupChat',
   data() {
@@ -30,17 +34,17 @@ export default {
     };
   },
   mounted() {
-    proxy.flooIm.on('onMentionMessage', (messages) => {
+    mainStore.getIm.on('onMentionMessage', (messages) => {
       const { from, config } = messages;
       const gid = this.getSid;
       const toUid = toNumber(messages.to);
       if (gid === toUid) {
         if (config && config.mentionList && config.mentionList.length) {
           // 如果有mention的
-          const uid = proxy.flooIm.userManage.getUid();
+          const uid = mainStore.getIm.userManage.getUid();
           const hasIndex = config.mentionList.findIndex((x) => x + '' === uid + '');
           if (hasIndex > -1) {
-            const umaps = proxy.flooIm.rosterManage.getAllRosterDetail();
+            const umaps = mainStore.getIm.rosterManage.getAllRosterDetail();
             const str = umaps[from].username + ' 在群中提到了您!';
             this.mentionMessage = str;
           }
@@ -51,7 +55,7 @@ export default {
   },
   components: {},
   computed: {
-    ...mapGetters('content', ['getGroupInfo', 'getSid']),
+    // ...mapGetters('content', ['getGroupInfo', 'getSid']),
     groupName() {
       let name = this.getGroupInfo.name;
       if (!name) {
@@ -75,7 +79,7 @@ export default {
 
     deleteConversation(id) {
       const also_delete_other_devices = true;
-      proxy.flooIm.sysManage.deleteConversation(id, also_delete_other_devices);
+      mainStore.getIm.sysManage.deleteConversation(id, also_delete_other_devices);
       alert('会话删除成功');
 
       collectionStore.getConversationList()

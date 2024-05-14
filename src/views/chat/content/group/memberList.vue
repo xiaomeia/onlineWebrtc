@@ -23,32 +23,35 @@
 
 <script>
 // import { mapGetters } from 'vuex';
+import { useMainStore } from "@/store/modules/index";
+
+const mainStore = useMainStore();
 
 export default {
   data() {
     return {
-      token: proxy.flooIm.userManage.getToken()
+      token: mainStore.getIm.userManage.getToken()
     };
   },
 
   mounted() {
-    proxy.flooIm.on('onGroupMemberChanged', (/*gid*/) => {
+    mainStore.getIm.on('onGroupMemberChanged', (/*gid*/) => {
       this.$store.dispatch('content/actionUpdateMemberList');
     });
   },
 
   computed: {
-    ...mapGetters('content', ['getSid', 'getGroupInfo', 'getMemberList', 'getAdminList']),
+    // ...mapGetters('content', ['getSid', 'getGroupInfo', 'getMemberList', 'getAdminList']),
     isAdmin() {
-      const uid = proxy.flooIm.userManage.getUid();
+      const uid = mainStore.getIm.userManage.getUid();
       return this.getAdminList.filter((x) => x.user_id === uid).length > 0;
     },
     isOwner() {
-      const uid = proxy.flooIm.userManage.getUid();
+      const uid = mainStore.getIm.userManage.getUid();
       return this.getGroupInfo.owner_id === uid;
     },
     im() {
-      return proxy.flooIm;
+      return mainStore.getIm;
     }
   },
 
@@ -62,7 +65,7 @@ export default {
       }
     },
     touchRoster(sid) {
-      const uid = proxy.flooIm.userManage.getUid();
+      const uid = mainStore.getIm.userManage.getUid();
       if (uid + '' === sid + '') {
         return;
       }

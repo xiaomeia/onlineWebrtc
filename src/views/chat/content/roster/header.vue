@@ -25,7 +25,7 @@ export default {
     };
   },
   mounted() {
-    proxy.flooIm.on('onInputStatusMessage', (message) => {
+    mainStore.getIm.on('onInputStatusMessage', (message) => {
       const { from, ext } = message;
       if (from == this.getSid) {
         let jext = {};
@@ -45,7 +45,7 @@ export default {
   },
   components: {},
   computed: {
-    ...mapGetters('content', ['getRosterInfo', 'getSid']),
+    // ...mapGetters('content', ['getRosterInfo', 'getSid']),
     rosterName() {
       let name = this.getRosterInfo.alias || this.getRosterInfo.nick_name || this.getRosterInfo.username;
       if (!name) {
@@ -69,7 +69,7 @@ export default {
 
     deleteConversation(id) {
       const also_delete_other_devices = true;
-      proxy.flooIm.sysManage.deleteConversation(id, also_delete_other_devices);
+      mainStore.getIm.sysManage.deleteConversation(id, also_delete_other_devices);
       alert('会话删除成功');
       collectionStore.getConversationList()
       headerStore.actionChangeHeaderStatus('conversation')

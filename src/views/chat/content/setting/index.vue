@@ -93,10 +93,10 @@ export default {
   },
   components: {},
   computed: {
-    ...mapGetters('setting', ['getSettingInfo', 'getProfileInfo']),
+    // ...mapGetters('setting', ['getSettingInfo', 'getProfileInfo']),
 
     token() {
-      return proxy.flooIm.userManage.getToken();
+      return mainStore.getIm.userManage.getToken();
     }
   },
   methods: {
@@ -107,7 +107,7 @@ export default {
     fileChangeHandler(e) {
       const file = e.target.files[0];
       console.log('Choose file: ', file);
-      proxy.flooIm.sysManage
+      mainStore.getIm.sysManage
           .asyncFileUpload({
             file,
             toType: 'rosterAvatar',
@@ -125,7 +125,7 @@ export default {
     },
 
     updateAvatarUrl(avatar) {
-      proxy.flooIm.userManage
+      mainStore.getIm.userManage
           .asyncUpdateAvatar({
             avatar
           })
@@ -138,7 +138,7 @@ export default {
     saveMobile() {
       const value = this.mobile || '';
       if (!value) return;
-      proxy.flooIm.userManage
+      mainStore.getIm.userManage
           .asyncUpdateMobile({
             mobile: value
           })
@@ -149,7 +149,7 @@ export default {
     saveNick() {
       const value = this.nick_name || '';
       // if (!value) return;
-      proxy.flooIm.userManage
+      mainStore.getIm.userManage
           .asyncUpdateNickName({
             nick_name: value
           })
@@ -186,15 +186,15 @@ export default {
     },
     rosterSwitchTouch() {
       const auth_mode = this.auth_mode === 1 ? 0 : 1;
-      const user_id = proxy.flooIm.userManage.getUid();
-      proxy.flooIm.userManage.asyncUpdateSettings({ auth_mode, user_id }).then(() => {
+      const user_id = mainStore.getIm.userManage.getUid();
+      mainStore.getIm.userManage.asyncUpdateSettings({ auth_mode, user_id }).then(() => {
         this.auth_mode = auth_mode;
       });
     },
     groupSwitchTouch() {
       const group_confirm = !this.group_confirm;
-      const user_id = proxy.flooIm.userManage.getUid();
-      proxy.flooIm.userManage.asyncUpdateSettings({ group_confirm, user_id }).then(() => {
+      const user_id = mainStore.getIm.userManage.getUid();
+      mainStore.getIm.userManage.asyncUpdateSettings({ group_confirm, user_id }).then(() => {
         this.group_confirm = group_confirm;
       });
     },
@@ -204,7 +204,7 @@ export default {
     },
 
     updateInfos() {
-      this.avatar = proxy.flooIm.sysManage.getImage({
+      this.avatar = mainStore.getIm.sysManage.getImage({
         avatar: this.getProfileInfo.avatar
       });
       this.mobile = this.getProfileInfo.mobile;
@@ -232,7 +232,7 @@ export default {
       })
           .then(({ value }) => {
             if (!value) return;
-            proxy.flooIm.userManage.asyncUpdateMobile({ mobile: value }).then(() => {
+            mainStore.getIm.userManage.asyncUpdateMobile({ mobile: value }).then(() => {
               this.mobile = value;
               alert('修改成功');
             });
@@ -240,7 +240,7 @@ export default {
           .catch(() => {});
     },
     settingNick() {
-      const im = proxy.flooIm;
+      const im = mainStore.getIm;
       this.$prompt('请输入昵称', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消'

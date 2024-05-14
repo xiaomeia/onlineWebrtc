@@ -39,6 +39,11 @@
 <script>
 // import { mapGetters } from 'vuex';
 
+import { useMainStore } from "@/store/modules/index";
+
+const mainStore = useMainStore();
+
+
 export default {
   name: 'groupInfo',
   data() {
@@ -50,7 +55,7 @@ export default {
   mounted() {
     this.refreshGroupInfo(this.getSid);
 
-    proxy.flooIm.on('onGroupListUpdate', () => {
+    mainStore.getIm.on('onGroupListUpdate', () => {
       this.$store.dispatch('contact/actionClearGroupList');
       this.$store.dispatch('contact/actionLazyGetGroupList');
     });
@@ -62,10 +67,10 @@ export default {
   },
   components: {},
   computed: {
-    ...mapGetters('content', ['getGroupInfo', 'getSid', 'getAdminList', 'getMemberList']),
+    // ...mapGetters('content', ['getGroupInfo', 'getSid', 'getAdminList', 'getMemberList']),
 
     token() {
-      return proxy.flooIm.userManage.getToken();
+      return mainStore.getIm.userManage.getToken();
     },
 
     group_id() {
@@ -76,11 +81,11 @@ export default {
       return this.getGroupInfo.owner_id;
     },
     isAdmin() {
-      const uid = proxy.flooIm.userManage.getUid();
+      const uid = mainStore.getIm.userManage.getUid();
       return this.getAdminList.filter((x) => x.user_id === uid).length > 0 || this.getGroupInfo.member_modify;
     },
     isOwner() {
-      const uid = proxy.flooIm.userManage.getUid();
+      const uid = mainStore.getIm.userManage.getUid();
       return this.getGroupInfo.owner_id === uid;
     },
     dismissMessage() {
@@ -89,19 +94,19 @@ export default {
   },
   methods: {
     refreshGroupInfo(newSid) {
-      proxy.flooIm.groupManage
+      mainStore.getIm.groupManage
         .asyncGetInfo({ group_id: newSid })
         .then((res) => {
-          res.avatar = proxy.flooIm.sysManage.getImage({
+          res.avatar = mainStore.getIm.sysManage.getImage({
             avatar: res.avatar,
             type: 'group'
           });
           this.groupInfo = res;
-          const uid = proxy.flooIm.userManage.getUid();
+          const uid = mainStore.getIm.userManage.getUid();
           const user = this.getMemberList.find((x) => x.user_id === uid);
           this.cardName = (user && (user.display_name || user.name)) || '';
           if (!this.cardName) {
-            proxy.flooIm.groupManage
+            mainStore.getIm.groupManage
               .asyncGetMemberDisplayName({
                 group_id: newSid,
                 user_list: [uid]
@@ -137,7 +142,7 @@ export default {
     fileChangeHandler(e) {
       const file = e.target.files[0];
 
-      proxy.flooIm.sysManage
+      mainStore.getIm.sysManage
         .asyncFileUpload({
           file,
           toType: 'groupAvatar',
@@ -156,7 +161,7 @@ export default {
     },
 
     updateAvatarUrl(url) {
-      proxy.flooIm.groupManage
+      mainStore.getIm.groupManage
         .asyncUpdateAvatar({
           group_id: this.getSid,
           value: url
@@ -170,18 +175,18 @@ export default {
     destroyClickHandler() {
       if (this.isOwner) {
         //dismiss
-        proxy.flooIm.groupManage.asyncDestroy({ group_id: this.getSid }).then(() => {
+        mainStore.getIm.groupManage.asyncDestroy({ group_id: this.getSid }).then(() => {
           alert('您已解散了此群。。');
         });
       } else {
         //leave
-        proxy.flooIm.groupManage.asyncLeave({ group_id: this.getSid }).then(() => {
+        mainStore.getIm.groupManage.asyncLeave({ group_id: this.getSid }).then(() => {
           alert('您已退出了此群。。');
         });
       }
 
       const also_delete_other_devices = true;
-      proxy.flooIm.sysManage.deleteConversation(this.getSid, also_delete_other_devices);
+      mainStore.getIm.sysManage.deleteConversation(this.getSid, also_delete_other_devices);
     },
     viewQrcode() {
       this.$store.dispatch('layer/actionSetShowmask', 'true');
@@ -197,7 +202,7 @@ export default {
       })
         .then(({ value }) => {
           if (!value) return;
-          proxy.flooIm.groupManage
+          mainStore.getIm.groupManage
             .asyncUpdateName({
               group_id: this.getSid,
               value
@@ -219,7 +224,7 @@ export default {
       })
         .then(({ value }) => {
           if (!value) return;
-          proxy.flooIm.groupManage
+          mainStore.getIm.groupManage
             .asyncUpdateDescription({
               group_id: this.getSid,
               value
@@ -238,7 +243,7 @@ export default {
       })
         .then(({ value }) => {
           if (!value) return;
-          proxy.flooIm.groupManage
+          mainStore.getIm.groupManage
             .asyncUpdateDisplayName({
               group_id: this.getSid,
               value

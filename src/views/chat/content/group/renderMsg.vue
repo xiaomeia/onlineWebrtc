@@ -80,6 +80,10 @@ import { numToString, toNumber } from '@/utils/index.js';
 // import 'highlight.js/styles/atom-one-light.css';
 // var JSONBigString = require('json-bigint');
 
+import { useMainStore } from "@/store/modules/index";
+
+const mainStore = useMainStore();
+
 export default {
   name: 'GroupChat',
   data() {
@@ -107,7 +111,7 @@ export default {
     };
   },
   mounted() {
-    const im = proxy.flooIm;
+    const im = mainStore.getIm;
     if (!im) return;
 
     im.on('onGroupMessageContentAppend', (message) => {
@@ -128,9 +132,9 @@ export default {
 
     // Message displayed as read
     const fromUid = toNumber(this.message.from);
-    const uid = proxy.flooIm.userManage.getUid();
+    const uid = mainStore.getIm.userManage.getUid();
     if (fromUid !== uid) {
-      const im = proxy.flooIm;
+      const im = mainStore.getIm;
       if (im) im.groupManage.readGroupMessage(this.getSid, this.message.id);
     }
 
@@ -156,7 +160,7 @@ export default {
   },
   props: ['message'],
   computed: {
-    ...mapGetters('content', ['getSid', 'getMessageTime', 'getMemberList']),
+    // ...mapGetters('content', ['getSid', 'getMessageTime', 'getMemberList']),
     timeMessage() {
       let { timestamp } = this.message;
       timestamp = toNumber(timestamp);
@@ -170,7 +174,7 @@ export default {
       return '';
     },
     im() {
-      return proxy.flooIm;
+      return mainStore.getIm;
     },
     token() {
       return this.im.userManage.getToken();

@@ -27,6 +27,9 @@ import { toNumber } from '@/utils/index';
 import { useChatviewStore } from '@/store/modules/content';
 import { useCollectionStore } from '@/store/modules/contact';
 import { useHeaderStore } from '@/store/modules/header';
+import { useMainStore } from "@/store/modules/index";
+
+const mainStore = useMainStore();
 
 const chatviewStore = useChatviewStore();
 const collectionStore = useCollectionStore();
@@ -47,10 +50,10 @@ export default {
   },
 
   computed: {
-    ...mapGetters('contact', ['getConversationList']),
-    ...mapGetters('content', ['getSid']),
+    // ...mapGetters('contact', ['getConversationList']),
+    // ...mapGetters('content', ['getSid']),
     token() {
-      return proxy.flooIm.userManage.getToken();
+      return mainStore.getIm.userManage.getToken();
     }
   },
 

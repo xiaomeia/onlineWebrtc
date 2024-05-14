@@ -29,9 +29,9 @@ export default {
   },
 
   computed: {
-    ...mapGetters('content', ['getSid']),
+    // ...mapGetters('content', ['getSid']),
     im() {
-      return proxy.flooIm;
+      return mainStore.getIm;
     },
     time() {
       return new Date().getTime();

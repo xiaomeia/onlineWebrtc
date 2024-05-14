@@ -26,9 +26,19 @@
 <script>
 // import { mapGetters } from 'vuex';
 
+import { useChatviewStore } from '@/store/modules/content';
+import { useCollectionStore } from '@/store/modules/contact';
+import { useHeaderStore } from '@/store/modules/header';
+import { useLayerStore } from '@/store/modules/layer';
+
+const chatviewStore = useChatviewStore();
+const collectionStore = useCollectionStore();
+const headerStore = useHeaderStore();
+const layersStore = useLayerStore();
+
 export default {
   mounted() {
-    this.$store.dispatch('header/actionLazyGetHeaderProfile');
+    // this.$store.dispatch('header/actionLazyGetHeaderProfile');
     this.changeStabImage(this.getHeaderStatus);
     if (navigator.userAgent.indexOf('Safari') > -1 && navigator.userAgent.indexOf('Chrome') == -1) {
       this.checkSafari = true;
@@ -49,7 +59,7 @@ export default {
   },
   watch: {
     getUserProfile(profile) {
-      this.avatar = proxy.flooIm.sysManage.getImage({
+      this.avatar = mainStore.getIm.sysManage.getImage({
         avatar: profile.avatar,
         type: 'roster'
       });
@@ -66,8 +76,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('header', ['getHeaderStatus', 'getUserProfile', 'getSupportSafariAudio']),
-    ...mapGetters('contact', ['getTotalUnread']),
+    // ...mapGetters('header', ['getHeaderStatus', 'getUserProfile', 'getSupportSafariAudio']),
+    // ...mapGetters('contact', ['getTotalUnread']),
 
     // avatar() {
     //   return this.$store.state.im.sysManage.getImage({
@@ -76,7 +86,7 @@ export default {
     //   });
     // },
     token() {
-      return proxy.flooIm.userManage.getToken();
+      return mainStore.getIm.userManage.getToken();
     }
   },
 
@@ -105,18 +115,30 @@ export default {
       }
     },
     touchRecent() {
-      this.$store.dispatch('header/actionChangeHeaderStatus', 'conversation');
-      this.$store.dispatch('chat/actionSetType', { type: 'x' });
+      headerStore.actionChangeHeaderStatus('conversation')
+      chatviewStore.actionSetType({
+        type: 'x'
+      })
+      // this.$store.dispatch('header/actionChangeHeaderStatus', 'conversation');
+      // this.$store.dispatch('chat/actionSetType', { type: 'x' });
       this.closeOtherLayers();
     },
     touchContact() {
-      this.$store.dispatch('header/actionChangeHeaderStatus', 'contact');
-      this.$store.dispatch('chat/actionSetType', { type: 'x' });
+      headerStore.actionChangeHeaderStatus('contact')
+      chatviewStore.actionSetType({
+        type: 'x'
+      })
+      // this.$store.dispatch('header/actionChangeHeaderStatus', 'contact');
+      // this.$store.dispatch('chat/actionSetType', { type: 'x' });
       this.closeOtherLayers();
     },
     touchSetting() {
-      this.$store.dispatch('header/actionChangeHeaderStatus', 'setting');
-      this.$store.dispatch('chat/actionSetType', { type: 'setting' });
+      headerStore.actionChangeHeaderStatus('setting')
+      chatviewStore.actionSetType({
+        type: 'setting'
+      })
+      // this.$store.dispatch('header/actionChangeHeaderStatus', 'setting');
+      // this.$store.dispatch('chat/actionSetType', { type: 'setting' });
       this.closeOtherLayers();
     },
     touchSafariAudioSupport() {
@@ -129,18 +151,23 @@ export default {
     },
 
     closeOtherLayers() {
-      this.$store.dispatch('contact/actionSetSearchkeyword', '');
+      // this.$store.dispatch('contact/actionSetSearchkeyword', '');
+      collectionStore.setSearchkeyword('');
 
-      this.$store.dispatch('layer/actionSetShowing', '');
-      this.$store.dispatch('layer/actionSetShowmask', false);
+      // this.$store.dispatch('layer/actionSetShowing', '');
+      // this.$store.dispatch('layer/actionSetShowmask', false);
+      layersStore.actionSetShowing('');
+      layersStore.actionSetShowmask(false);
     },
 
     headerAddChickHandler() {
-      this.$store.dispatch('layer/actionSetShowing', 'addpop');
+      // this.$store.dispatch('layer/actionSetShowing', 'addpop');
+      layersStore.actionSetShowing('addpop');
     },
     handleSearch(e) {
       const kw = e.target.value;
-      this.$store.dispatch('contact/actionSetSearchkeyword', kw);
+      // this.$store.dispatch('contact/actionSetSearchkeyword', kw);
+      collectionStore.setSearchkeyword(kw);
     }
   }
 };

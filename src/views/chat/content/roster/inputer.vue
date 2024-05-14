@@ -30,9 +30,9 @@ export default {
   },
   components: {},
   computed: {
-    ...mapGetters('content', ['getSid', 'getIntentMessage']),
+    // ...mapGetters('content', ['getSid', 'getIntentMessage']),
     im() {
-      return proxy.flooIm;
+      return mainStore.getIm;
     }
   },
   mounted() {

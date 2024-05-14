@@ -14,6 +14,9 @@ import Content from './content';
 import { toNumber } from '@/utils/index';
 import { useCollectionStore } from '@/store/modules/contact';
 import { useLayerStore } from '@/store/modules/layer';
+import { useMainStore } from "@/store/modules/index";
+
+const mainStore = useMainStore();
 // import { useCollectionStore } from '@/stores/collectionStore';
 
 // import { mapGetters } from 'vuex';
@@ -33,6 +36,7 @@ export default {
     };
   },
   mounted() {
+    console.log('test--------------------------------', this.$root.$options.flooIm)
     const collectionStore = useCollectionStore();
     const layersStore = useLayerStore();
     {
@@ -42,43 +46,43 @@ export default {
       au.pause();
     }
 
-    proxy.flooIm.on('onRosterListUpdate', () => {
+    mainStore.getIm.on('onRosterListUpdate', () => {
       collectionStore.clearRosterList()
       collectionStore.lazyGetRosterList()
       // this.$store.dispatch('contact/actionClearRosterList');
       // this.$store.dispatch('contact/actionLazyGetRosterList');
     });
 
-    proxy.flooIm.on('onGroupListUpdate', () => {
+    mainStore.getIm.on('onGroupListUpdate', () => {
       collectionStore.clearGroupList()
       collectionStore.lazyGetGroupList()
       // this.$store.dispatch('contact/actionClearGroupList');
       // this.$store.dispatch('contact/actionLazyGetGroupList');
     });
 
-    proxy.flooIm.on('recentlistUpdate', () => {
+    mainStore.getIm.on('recentlistUpdate', () => {
       collectionStore.getConversationList()
       // this.$store.dispatch('contact/actionGetConversationList');
     });
 
-    proxy.flooIm.on('onUnreadChange', () => {
+    mainStore.getIm.on('onUnreadChange', () => {
       collectionStore.getConversationList()
       // this.$store.dispatch('contact/actionGetConversationList');
     });
 
-    proxy.flooIm.on('onRosterInfoUpdate', () => {
+    mainStore.getIm.on('onRosterInfoUpdate', () => {
       collectionStore.getConversationList()
       // this.$store.dispatch('contact/actionGetConversationList');
     });
 
-    proxy.flooIm.on('onRosterRTCMessage', (message) => {
+    mainStore.getIm.on('onRosterRTCMessage', (message) => {
       let that = this;
       const { config, isHistory, isNative } = message;
       const fromUid = toNumber(message.from);
       const toUid = toNumber(message.to);
-      const uid = proxy.flooIm.userManage.getUid();
+      const uid = mainStore.getIm.userManage.getUid();
       const au = document.querySelector('#phone_ring_player');
-      const callStatus = proxy.flooIm.rtcManage.getInCallStatus();
+      const callStatus = mainStore.getIm.rtcManage.getInCallStatus();
 
       if (!isHistory && config && !isNative) {
         if (config.action && config.action === 'call' && config.initiator) {
@@ -104,7 +108,7 @@ export default {
             );
           } else {
             if (config.initiator !== uid && toUid === uid) {
-              proxy.flooIm.rtcManage.sendRTCMessage({
+              mainStore.getIm.rtcManage.sendRTCMessage({
                 uid: fromUid,
                 content: 'busy',
                 config: JSON.stringify({
@@ -134,7 +138,7 @@ export default {
             // this.$store.dispatch('contact/actionSetCallId', '');
             // this.$store.dispatch('contact/actionSetCallPickupTime', 0);
           } else {
-            proxy.flooIm.rtcManage.joinRoom();
+            mainStore.getIm.rtcManage.joinRoom();
           }
         } else if (config.action && config.action == 'hangup') {
           this.removeDelayCall(config.callId);
@@ -156,7 +160,7 @@ export default {
             // current user other device hangup call. just display message and do nothing.
           } else {
             if (callStatus == true) {
-              proxy.flooIm.rosterManage.readRosterMessage(fromUid, message.id);
+              mainStore.getIm.rosterManage.readRosterMessage(fromUid, message.id);
             }
           }
         }
