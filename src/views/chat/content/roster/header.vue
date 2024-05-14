@@ -10,6 +10,12 @@
 
 <script>
 // import { mapGetters } from 'vuex';
+import { useChatviewStore } from '@/store/modules/content';
+import { useCollectionStore } from '@/store/modules/contact';
+import { useHeaderStore } from '@/store/modules/header';
+const chatviewStore = useChatviewStore();
+const collectionStore = useCollectionStore();
+const headerStore = useHeaderStore();
 
 export default {
   name: 'RosterChat',
@@ -43,29 +49,38 @@ export default {
     rosterName() {
       let name = this.getRosterInfo.alias || this.getRosterInfo.nick_name || this.getRosterInfo.username;
       if (!name) {
-        this.$store.dispatch('content/actionUpdateRoster');
+        chatviewStore.actionUpdateRoster()
+        // this.$store.dispatch('content/actionUpdateRoster');
       }
       return name;
     }
   },
   methods: {
     touchUserNameHandler() {
-      this.$store.dispatch('content/actionSetType', {
+      chatviewStore.actionSetType({
         sid: this.getSid,
         type: 'rosterinfo'
-      });
+      })
+      // this.$store.dispatch('content/actionSetType', {
+      //   sid: this.getSid,
+      //   type: 'rosterinfo'
+      // });
     },
 
     deleteConversation(id) {
       const also_delete_other_devices = true;
       proxy.flooIm.sysManage.deleteConversation(id, also_delete_other_devices);
       alert('会话删除成功');
-
-      this.$store.dispatch('contact/actionGetConversationList');
-      this.$store.dispatch('header/actionChangeHeaderStatus', 'conversation');
-      this.$store.dispatch('content/actionSetType', {
+      collectionStore.getConversationList()
+      headerStore.actionChangeHeaderStatus('conversation')
+      chatviewStore.actionSetType({
         sid: undefined
-      });
+      })
+      // this.$store.dispatch('contact/actionGetConversationList');
+      // this.$store.dispatch('header/actionChangeHeaderStatus', 'conversation');
+      // this.$store.dispatch('content/actionSetType', {
+      //   sid: undefined
+      // });
     }
   }
 };

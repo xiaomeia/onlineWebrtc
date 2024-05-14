@@ -13,6 +13,8 @@
 // import Chat from "./chat.vue";
 import Message from './renderMsg.vue';
 import { numToString, toNumber } from '@/utils/index';
+import { useChatviewStore } from '@/store/modules/content';
+const chatviewStore = useChatviewStore();
 
 // import { mapGetters } from 'vuex';
 // var JSONBigString = require('json-bigint');
@@ -54,10 +56,14 @@ export default {
 
     im.on('onReceiveHistoryMsg', ({ next }) => {
       this.queryingHistory = false;
-      this.$store.dispatch('content/actionAppendMessage', {
+      chatviewStore.actionAppendMessage({
         history: true,
         next
-      });
+      })
+      // this.$store.dispatch('content/actionAppendMessage', {
+      //   history: true,
+      //   next
+      // });
       this.scroll();
     });
 
@@ -181,13 +187,15 @@ export default {
 
     requireMessage() {
       setTimeout(() => {
-        this.$store.dispatch('content/actionRequireMessage');
+        chatviewStore.actionRequireMessage()
+        // this.$store.dispatch('content/actionRequireMessage');
       }, 200);
     },
 
     deleteMessage(mid) {
       setTimeout(() => {
-        this.$store.dispatch('content/actionDeleteMessage', mid);
+        chatviewStore.actionDeleteMessage(mid)
+        // this.$store.dispatch('content/actionDeleteMessage', mid);
         this.forceRefresh = true;
         this.$nextTick(() => {
           this.forceRefresh = false;
@@ -230,7 +238,8 @@ export default {
       this.queryHistoryTimer = setTimeout(() => {
         this.queryingHistory = false;
       }, 10000);
-      this.$store.dispatch('content/queryHistory');
+      chatviewStore.queryHistory()
+      // this.$store.dispatch('content/queryHistory');
     },
 
     scroll() {

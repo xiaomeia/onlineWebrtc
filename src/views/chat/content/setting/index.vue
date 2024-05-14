@@ -59,6 +59,18 @@
 <script>
 // import { mapGetters } from 'vuex';
 
+import { useSettingStore } from '@/store/modules/setting'
+const settingStore = useSettingStore()
+
+import { useLoginStore } from '@/store/modules/login'
+const loginStore = useLoginStore()
+
+import { useHeaderStore } from '@/store/modules/header'
+const headerStore  = useHeaderStore()
+
+import { useLayerStore } from '@/store/modules/layer'
+const layerStore = useLayerStore()
+
 export default {
   name: 'rosterInfo',
   data() {
@@ -74,8 +86,10 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch('setting/actionGetProfile');
-    this.$store.dispatch('setting/actionGetSettingInfo');
+    settingStore.actionGetProfile()
+    settingStore.actionGetSettingInfo()
+    // this.$store.dispatch('setting/actionGetProfile');
+    // this.$store.dispatch('setting/actionGetSettingInfo');
   },
   components: {},
   computed: {
@@ -94,53 +108,54 @@ export default {
       const file = e.target.files[0];
       console.log('Choose file: ', file);
       proxy.flooIm.sysManage
-        .asyncFileUpload({
-          file,
-          toType: 'rosterAvatar',
-          processCallback: function (res) {
-            console.log('fileChangeHandler rosterAvatar file upload percent :' + 100 * (res.loaded / res.total));
-          }
-        })
-        .then((res) => {
-          this.$refs.fileRef.value = '';
-          this.updateAvatarUrl(res.url);
-        })
-        .catch(() => {
-          this.$refs.fileRef.value = '';
-        });
+          .asyncFileUpload({
+            file,
+            toType: 'rosterAvatar',
+            processCallback: function (res) {
+              console.log('fileChangeHandler rosterAvatar file upload percent :' + 100 * (res.loaded / res.total));
+            }
+          })
+          .then((res) => {
+            this.$refs.fileRef.value = '';
+            this.updateAvatarUrl(res.url);
+          })
+          .catch(() => {
+            this.$refs.fileRef.value = '';
+          });
     },
 
     updateAvatarUrl(avatar) {
       proxy.flooIm.userManage
-        .asyncUpdateAvatar({
-          avatar
-        })
-        .then(() => {
-          this.$store.dispatch('setting/actionGetProfile');
-          alert('更新头像完成');
-        });
+          .asyncUpdateAvatar({
+            avatar
+          })
+          .then(() => {
+            settingStore.actionGetProfile()
+            // this.$store.dispatch('setting/actionGetProfile');
+            alert('更新头像完成');
+          });
     },
     saveMobile() {
       const value = this.mobile || '';
       if (!value) return;
       proxy.flooIm.userManage
-        .asyncUpdateMobile({
-          mobile: value
-        })
-        .then(() => {
-          alert('修改成功');
-        });
+          .asyncUpdateMobile({
+            mobile: value
+          })
+          .then(() => {
+            alert('修改成功');
+          });
     },
     saveNick() {
       const value = this.nick_name || '';
       // if (!value) return;
       proxy.flooIm.userManage
-        .asyncUpdateNickName({
-          nick_name: value
-        })
-        .then(() => {
-          alert('修改成功');
-        });
+          .asyncUpdateNickName({
+            nick_name: value
+          })
+          .then(() => {
+            alert('修改成功');
+          });
     },
     getApp() {
       return this.$parent.$parent.$parent;
@@ -163,8 +178,11 @@ export default {
     },
     logout() {
       this.getApp().imLogout();
-      this.$store.dispatch('login/actionChangeAppStatus', 'login');
-      this.$store.dispatch('header/actionChangeHeaderUserProfile', {});
+      loginStore.actionChangeAppStatus('login')
+      headerStore.actionChangeHeaderUserProfile({})
+
+      // this.$store.dispatch('login/actionChangeAppStatus', 'login');
+      // this.$store.dispatch('header/actionChangeHeaderUserProfile', {});
     },
     rosterSwitchTouch() {
       const auth_mode = this.auth_mode === 1 ? 0 : 1;
@@ -199,8 +217,11 @@ export default {
       this.user_id = this.getSettingInfo.user_id;
     },
     viewQrcode() {
-      this.$store.dispatch('layer/actionSetShowmask', 'true');
-      this.$store.dispatch('layer/actionSetShowing', 'qrprofile');
+      layerStore.actionSetShowmask('true')
+      layerStore.actionSetShowing('qrprofile')
+
+      // this.$store.dispatch('layer/actionSetShowmask', 'true');
+      // this.$store.dispatch('layer/actionSetShowing', 'qrprofile');
     },
     settingMobile() {
       this.$prompt('请输入手机号', '提示', {
@@ -209,14 +230,14 @@ export default {
         inputPattern: /^((13[0-9])|(14[0-9])|(15[^4,\\D])|(166)|(17[0-9])|(18[0-9]))\\d{8}$/,
         inputErrorMessage: '手机号格式不正确'
       })
-        .then(({ value }) => {
-          if (!value) return;
-          proxy.flooIm.userManage.asyncUpdateMobile({ mobile: value }).then(() => {
-            this.mobile = value;
-            alert('修改成功');
-          });
-        })
-        .catch(() => {});
+          .then(({ value }) => {
+            if (!value) return;
+            proxy.flooIm.userManage.asyncUpdateMobile({ mobile: value }).then(() => {
+              this.mobile = value;
+              alert('修改成功');
+            });
+          })
+          .catch(() => {});
     },
     settingNick() {
       const im = proxy.flooIm;
@@ -224,15 +245,16 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消'
       })
-        .then(({ value }) => {
-          if (!value) return;
-          im.userManage.asyncUpdateNickName({ nick_name: value }).then(() => {
-            this.nick_name = value;
-            this.$store.dispatch('header/actionGetHeaderProfile');
-            alert('修改成功');
-          });
-        })
-        .catch(() => {});
+          .then(({ value }) => {
+            if (!value) return;
+            im.userManage.asyncUpdateNickName({ nick_name: value }).then(() => {
+              this.nick_name = value;
+              headerStore.actionGetHeaderProfile()
+              // this.$store.dispatch('header/actionGetHeaderProfile');
+              alert('修改成功');
+            });
+          })
+          .catch(() => {});
     }
     //methods finish
   },

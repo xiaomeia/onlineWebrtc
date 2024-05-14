@@ -16,7 +16,10 @@
 
 <script>
 // import { mapGetters } from 'vuex';
-
+import { useCollectionStore } from '@/store/modules/contact';
+import { useLayerStore } from '@/store/modules/layer';
+const collectionStore = useCollectionStore();
+const layerStore = useLayerStore()
 export default {
   name: 'rosterInputer',
   data() {
@@ -71,15 +74,21 @@ export default {
     },
 
     videoCallClickHandler() {
-      this.$store.dispatch('layer/actionSetShowing', 'videocall');
-      this.$store.dispatch('layer/actionSetShowmask', 'true');
-      this.$store.dispatch('contact/actionSetCallId', this.im.userManage.getUid().toString() + '_' + Date.now());
+      collectionStore.setCallId(this.im.userManage.getUid().toString() + '_' + Date.now())
+      layerStore.actionSetShowing('videocall')
+      layerStore.actionSetShowmask(true)
+      // this.$store.dispatch('layer/actionSetShowing', 'videocall');
+      // this.$store.dispatch('layer/actionSetShowmask', 'true');
+      // this.$store.dispatch('contact/actionSetCallId', this.im.userManage.getUid().toString() + '_' + Date.now());
     },
 
     audioCallClickHandler() {
-      this.$store.dispatch('layer/actionSetShowing', 'audiocall');
-      this.$store.dispatch('layer/actionSetShowmask', 'true');
-      this.$store.dispatch('contact/actionSetCallId', this.im.userManage.getUid().toString() + '_' + Date.now());
+      layerStore.actionSetShowing('audiocall')
+      layerStore.actionSetShowmask(true)
+      // this.$store.dispatch('layer/actionSetShowing', 'audiocall');
+      // this.$store.dispatch('layer/actionSetShowmask', 'true');
+      collectionStore.setCallId(this.im.userManage.getUid().toString() + '_' + Date.now())
+      // this.$store.dispatch('contact/actionSetCallId', this.im.userManage.getUid().toString() + '_' + Date.now());
     },
 
     handleSendMessage() {

@@ -413,3 +413,15 @@ export function numToString (obj = 0) {
   }
   return new Long(obj).toString();
 };
+
+export function toLong(obj = 0) {
+  if (typeof obj === 'string') return Long.fromString(obj);
+  const { low, high, unsigned = true } = obj;
+  if (typeof low !== 'undefined' && high !== 'undefined') {
+    return new Long(low, high, unsigned);
+  }
+  if (typeof obj === 'number') {
+    return Long.fromNumber(obj);
+  }
+  return new Long();
+};

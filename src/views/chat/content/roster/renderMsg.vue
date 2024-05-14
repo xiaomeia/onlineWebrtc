@@ -86,6 +86,12 @@ import { numToString, toNumber } from '@/utils/index.js';
 // import hljs from 'highlight.js';
 // import 'highlight.js/styles/atom-one-light.css';
 // var JSONBigString = require('json-bigint');
+import { useChatviewStore } from '@/store/modules/content';
+import { useLayerStore } from '@/store/modules/layer';
+import { useForwardStore } from '@/store/modules/forward';
+const chatviewStore = useChatviewStore();
+const layerStore = useLayerStore()
+const forwardStore = useForwardStore()
 
 export default {
   name: 'RosterChat',
@@ -126,7 +132,8 @@ export default {
     const savedMessageTime = this.getMessageTime;
     const last = (savedMessageTime.length && savedMessageTime[savedMessageTime.length - 1]) || 0;
     if (timestamp - last > 5 * 60 * 1000) {
-      this.$store.dispatch('content/actionUpdateMessageTime', timestamp);
+      chatviewStore.actionUpdateMessageTime(timestamp)
+      // this.$store.dispatch('content/actionUpdateMessageTime', timestamp);
     }
 
     // Message displayed as read
@@ -345,7 +352,8 @@ export default {
       this.im.rosterManage.deleteMessage(this.getSid, idStr);
     },
     forwardMessage() {
-      this.$store.dispatch('forward/actionRecordForwardMessage', this.message);
+      forwardStore.actionRecordForwardMessage(this.message)
+      // this.$store.dispatch('forward/actionRecordForwardMessage', this.message);
     },
     recallMessage() {
       const idStr = numToString(this.message.id).toString();
@@ -365,16 +373,22 @@ export default {
     },
 
     openImage(url) {
-      this.$store.dispatch('layer/actionSetShowing', 'image');
-      this.$store.dispatch('layer/actionSetShowmask', true);
-      this.$store.dispatch('layer/actionSetImageUrl', url);
+      layerStore.actionSetShowing('image')
+      layerStore.actionSetShowmask(true)
+      layerStore.actionSetImageUrl(url)
+      // this.$store.dispatch('layer/actionSetShowing', 'image');
+      // this.$store.dispatch('layer/actionSetShowmask', true);
+      // this.$store.dispatch('layer/actionSetImageUrl', url);
     },
 
     playVideo() {
       let attachUrl = this.attachUrl;
-      this.$store.dispatch('layer/actionSetShowing', 'video');
-      this.$store.dispatch('layer/actionSetShowmask', true);
-      this.$store.dispatch('layer/actionSetVideoUrl', attachUrl);
+      layerStore.actionSetShowing('video')
+      layerStore.actionSetShowmask(true)
+      layerStore.actionSetVideoUrl(attachUrl)
+      // this.$store.dispatch('layer/actionSetShowing', 'video');
+      // this.$store.dispatch('layer/actionSetShowmask', true);
+      // this.$store.dispatch('layer/actionSetVideoUrl', attachUrl);
     },
 
     /* eslint-disable no-useless-escape */

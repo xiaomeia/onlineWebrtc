@@ -32,6 +32,12 @@
 
 <script>
 // import { mapGetters } from 'vuex';
+import { useChatviewStore } from '@/store/modules/content';
+import { useCollectionStore } from '@/store/modules/contact';
+import { useHeaderStore } from '@/store/modules/header';
+const chatviewStore = useChatviewStore();
+const collectionStore = useCollectionStore();
+const headerStore = useHeaderStore();
 
 export default {
   name: 'rosterInfo',
@@ -94,9 +100,12 @@ export default {
         .then(({ value }) => {
           if (!value) return;
           im.rosterManage.asyncUpdateRosterAlias({ user_id: this.getSid, alias: value }).then(() => {
-            this.$store.dispatch('content/actionUpdateRoster');
-            this.$store.dispatch('contact/actionGetConversationList');
-            this.$store.dispatch('contact/actionLazyGetRosterList');
+            chatviewStore.actionUpdateRoster()
+            collectionStore.getConversationList()
+            collectionStore.lazyGetRosterList()
+            // this.$store.dispatch('content/actionUpdateRoster');
+            // this.$store.dispatch('contact/actionGetConversationList');
+            // this.$store.dispatch('contact/actionLazyGetRosterList');
             alert('修改成功');
           });
         })
@@ -119,11 +128,16 @@ export default {
     },
 
     chatClickHandler() {
-      this.$store.dispatch('header/actionChangeHeaderStatus', 'conversation');
-      this.$store.dispatch('content/actionSetType', {
+      headerStore.actionChangeHeaderStatus('conversation')
+      chatviewStore.actionSetType({
         sid: this.getSid,
         type: 'rosterchat'
-      });
+      })
+      // this.$store.dispatch('header/actionChangeHeaderStatus', 'conversation');
+      // this.$store.dispatch('content/actionSetType', {
+      //   sid: this.getSid,
+      //   type: 'rosterchat'
+      // });
     }
   }
 };

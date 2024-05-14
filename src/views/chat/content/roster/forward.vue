@@ -15,11 +15,14 @@
 
 <script>
 // import { mapGetters } from 'vuex';
+import { useForwardStore } from '@/store/modules/forward';
+const forwardStore = useForwardStore();
 
 export default {
   name: 'RosterForward',
   mounted() {
-    this.$store.dispatch('forward/actionGetForwardList');
+    forwardStore.actionGetForwardList()
+    // this.$store.dispatch('forward/actionGetForwardList');
   },
   data() {
     return {
@@ -34,14 +37,19 @@ export default {
 
   methods: {
     cancelForward() {
-      this.$store.dispatch('forward/actionCancelForward', false);
+      forwardStore.actionCancelForward(false)
+      // this.$store.dispatch('forward/actionCancelForward', false);
     },
 
     clickMemberForwardMember(id, type) {
-      this.$store.dispatch('forward/actionForwardMessage', {
+      forwardStore.actionForwardMessage({
         type,
         id
-      });
+      })
+      // this.$store.dispatch('forward/actionForwardMessage', {
+      //   type,
+      //   id
+      // });
     }
     //methods finish
   }

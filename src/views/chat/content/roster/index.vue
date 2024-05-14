@@ -13,6 +13,8 @@ import Inputer from './inputer.vue';
 import Header from './header.vue';
 import Forward from './forward.vue';
 
+import { useChatviewStore } from '@/store/modules/content';
+const chatviewStore = useChatviewStore();
 // import { mapGetters } from 'vuex';
 
 export default {
@@ -36,7 +38,8 @@ export default {
   },
   methods: {
     requireUserInfo() {
-      this.$store.dispatch('content/actionUpdateRoster');
+      chatviewStore.actionUpdateRoster()
+      // this.$store.dispatch('content/actionUpdateRoster');
     }
   },
   watch: {
