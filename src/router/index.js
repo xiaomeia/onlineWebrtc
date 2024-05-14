@@ -73,6 +73,11 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/chat',
+    component: import('@/views/chatting/index'),
+    hidden: true,
+  },
+  {
     path: '/user',
     component: Layout,
     hidden: true,

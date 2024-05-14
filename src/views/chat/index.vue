@@ -1,68 +1,187 @@
 <template>
-    <div class="app-container">
-        <div class="chat-tab">
-            <div v-for="item in tabList" :key="item.name" class="tab-item" @click="currentTab = item.name">
-                <div class="tab-title">{{ item.title }}</div>
-                <div class="tab-line" v-show="currentTab === item.name"></div>
-            </div>
-        </div>
-        <component :is="currentComponent" />
-    </div>
+  <div class="chat-index">
+    <audio id="phone_ring_player" src="/audio/phone_ring.mp3" class="hide" autoplay playsinline muted />
+    <Header />
+    <Contact />
+    <Content />
+  </div>
 </template>
-  
-<script setup name="chat">
-import { ref } from 'vue'
-import ChatRoom from './ChatRoom.vue';
-import ChatDetail from './ChatDetail.vue';
 
-const tabList = [
+<script>
+import Header from './header';
+import Contact from './contact';
+import Content from './content';
+import { toNumber } from '@/utils/index';
+import { useCollectionStore } from '@/store/modules/contact';
+import { useLayerStore } from '@/store/modules/layer';
+// import { useCollectionStore } from '@/stores/collectionStore';
+
+// import { mapGetters } from 'vuex';
+
+// import { mapActions, mapState, mapGetters } from "vuex";
+
+export default {
+  name: 'HelloWorld',
+  components: {
+    Header,
+    Contact,
+    Content
+  },
+  data() {
+    return {
+      callMap: new Map()
+    };
+  },
+  mounted() {
+    const collectionStore = useCollectionStore();
+    const layersStore = useLayerStore();
     {
-        title: '接诊窗口',
-        name: 'chat-room'
+      const au = document.getElementById('phone_ring_player');
+      au.muted = false;
+      au.loop = false;
+      au.pause();
+    }
+
+    proxy.flooIm.on('onRosterListUpdate', () => {
+      collectionStore.clearRosterList()
+      collectionStore.lazyGetRosterList()
+      // this.$store.dispatch('contact/actionClearRosterList');
+      // this.$store.dispatch('contact/actionLazyGetRosterList');
+    });
+
+    proxy.flooIm.on('onGroupListUpdate', () => {
+      collectionStore.clearGroupList()
+      collectionStore.lazyGetGroupList()
+      // this.$store.dispatch('contact/actionClearGroupList');
+      // this.$store.dispatch('contact/actionLazyGetGroupList');
+    });
+
+    proxy.flooIm.on('recentlistUpdate', () => {
+      collectionStore.getConversationList()
+      // this.$store.dispatch('contact/actionGetConversationList');
+    });
+
+    proxy.flooIm.on('onUnreadChange', () => {
+      collectionStore.getConversationList()
+      // this.$store.dispatch('contact/actionGetConversationList');
+    });
+
+    proxy.flooIm.on('onRosterInfoUpdate', () => {
+      collectionStore.getConversationList()
+      // this.$store.dispatch('contact/actionGetConversationList');
+    });
+
+    proxy.flooIm.on('onRosterRTCMessage', (message) => {
+      let that = this;
+      const { config, isHistory, isNative } = message;
+      const fromUid = toNumber(message.from);
+      const toUid = toNumber(message.to);
+      const uid = proxy.flooIm.userManage.getUid();
+      const au = document.querySelector('#phone_ring_player');
+      const callStatus = proxy.flooIm.rtcManage.getInCallStatus();
+
+      if (!isHistory && config && !isNative) {
+        if (config.action && config.action === 'call' && config.initiator) {
+          if (callStatus == false) {
+            this.callMap.set(
+              config.callId,
+              setTimeout(function () {
+                if (config.initiator !== uid && toUid === uid) {
+                  collectionStore.setCallInviteInfo(config)
+                  collectionStore.setCallId(config.callId)
+                  layersStore.actionSetShowmask('true')
+                  layersStore.actionSetShowing('callinvite')
+                  // that.$store.dispatch('contact/actionSetCallInviteInfo', config);
+                  // that.$store.dispatch('contact/actionSetCallId', config.callId);
+                  // that.$store.dispatch('layer/actionSetShowmask', 'true');
+                  // that.$store.dispatch('layer/actionSetShowing', 'callinvite');
+                  au.loop = true;
+                  au.play();
+                } else {
+                  // current user other device launch call，just display message and do nothing.
+                }
+              }, 1000)
+            );
+          } else {
+            if (config.initiator !== uid && toUid === uid) {
+              proxy.flooIm.rtcManage.sendRTCMessage({
+                uid: fromUid,
+                content: 'busy',
+                config: JSON.stringify({
+                  action: 'hangup',
+                  callId: config.callId,
+                  initiator: config.initiator,
+                  pushMessageLocKey: 'callee_busy'
+                })
+              });
+            } else {
+              // should not come here.
+            }
+          }
+        } else if (config.action && config.action == 'pickup') {
+          this.removeDelayCall(config.callId);
+          this.stopPhoneRing();
+          if (fromUid === uid) {
+            // current use other device pickup call.
+            layersStore.actionSetShowing('')
+            layersStore.actionSetShowmask(false)
+            collectionStore.setCallInviteInfo(null)
+            collectionStore.setCallId('')
+            collectionStore.setCallPickupTime(0)
+            // this.$store.dispatch('layer/actionSetShowing', '');
+            // this.$store.dispatch('layer/actionSetShowmask', false);
+            // this.$store.dispatch('contact/actionSetCallInviteInfo', null);
+            // this.$store.dispatch('contact/actionSetCallId', '');
+            // this.$store.dispatch('contact/actionSetCallPickupTime', 0);
+          } else {
+            proxy.flooIm.rtcManage.joinRoom();
+          }
+        } else if (config.action && config.action == 'hangup') {
+          this.removeDelayCall(config.callId);
+          this.stopPhoneRing();
+          layersStore.actionSetShowing('')
+          layersStore.actionSetShowmask(false)
+          collectionStore.setCallInviteInfo(null)
+          collectionStore.setCallId('')
+          collectionStore.setCallPickupTime(0)
+          // this.$store.dispatch('layer/actionSetShowing', '');
+          // this.$store.dispatch('layer/actionSetShowmask', false);
+          // this.$store.dispatch('contact/actionSetCallInviteInfo', null);
+          // this.$store.dispatch('contact/actionSetCallId', '');
+          // this.$store.dispatch('contact/actionSetCallPickupTime', 0);
+        } else if (config.action && config.action == 'record') {
+          this.removeDelayCall(config.callId);
+          this.stopPhoneRing();
+          if (fromUid === uid) {
+            // current user other device hangup call. just display message and do nothing.
+          } else {
+            if (callStatus == true) {
+              proxy.flooIm.rosterManage.readRosterMessage(fromUid, message.id);
+            }
+          }
+        }
+      }
+    });
+  },
+  methods: {
+    removeDelayCall(callId) {
+      if (this.callMap.has(callId)) {
+        clearTimeout(this.callMap.get(callId));
+        this.callMap.delete(callId);
+      }
     },
-    {
-        title: '患者详情',
-        name: 'chat-detail'
+
+    stopPhoneRing() {
+      const au = document.querySelector('#phone_ring_player');
+      au.loop = false;
+      au.pause();
     }
-]
-const currentTab = ref('chat-room')
-
-const currentComponent = computed(() => {
-    return currentTab.value === 'chat-room' ? ChatRoom : ChatDetail
-})
-
+    // clickA() {
+    //   // this.$store.dispatch("test/invokePushItems", "hello");
+    // }
+    // ...mapActions("login", ["alertName"])
+  }
+};
 </script>
-<style lang='scss' scoped>
-.chat-tab {
-    background-color: #fff;
-    border-radius: 12px;
-    padding: 15px 10px;
-    display: flex;
-    align-items: center;
 
-    .tab-item {
-        height:26px;
-        position: relative;
-    }
-
-    .tab-title {
-        margin:0 10px;
-        font-family: 'Open Sans';
-        font-size: 14px;
-        color: #121212;
-    }
-
-    .tab-line {
-        background: linear-gradient(45deg, #9357f2, #c969ec);
-        border-radius: 1.5px;
-        color: #E9E7EC;
-        height: 3px;
-        width: 24px;
-        position: absolute;
-        left:50%;
-        bottom: 0;
-        transform: translateX(-50%);
-    }
-}
-</style>
-  
+<style scoped></style>

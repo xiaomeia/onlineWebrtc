@@ -45,18 +45,23 @@
           end-placeholder="请选择就诊日期"
         ></el-date-picker> -->
           <el-date-picker
-              value-format="YYYY-MM-DD"
-              v-model="queryParams.visit_time"
-              type="daterange"
-              start-placeholder="请选择就诊日期"
-              end-placeholder="请选择就诊日期"
-              :default-value="[new Date(), new Date()]"
+            value-format="YYYY-MM-DD"
+            v-model="queryParams.visit_time"
+            type="daterange"
+            start-placeholder="请选择就诊日期"
+            end-placeholder="请选择就诊日期"
+            :default-value="[new Date(), new Date()]"
           />
         </el-form-item>
       </div>
       <el-form-item style="float: right">
-        <el-button class="liner-btn tool-btn" @click="handleQuery">搜索</el-button>
-        <el-button class="liner-btn tool-btn" @click="resetQuery">重置</el-button>
+        <el-button class="liner-btn tool-btn" @click="Register">注册</el-button>
+        <el-button class="liner-btn tool-btn" @click="handleQuery"
+          >搜索</el-button
+        >
+        <el-button class="liner-btn tool-btn" @click="resetQuery"
+          >重置</el-button
+        >
       </el-form-item>
     </el-form>
     <ul class="screen-list">
@@ -69,8 +74,8 @@
         :key="i"
         :class="{ active: screenIndex == i + 1 }"
         @click="handleScreen(i + 1)"
-      >{{item.status}}
-        (<span>{{ item.count }}</span
+      >
+        {{ item.status }} (<span>{{ item.count }}</span
         >)
       </li>
       <!-- <li :class="{ active: screenIndex == 1 }" @click="handleScreen(1)">
@@ -131,12 +136,12 @@
               @click="handleReception(scope.row)"
               >接诊</el-button
             >
-<!--            <el-button-->
-<!--              class="liner-btn"-->
-<!--              v-if="scope.row.status == 1"-->
-<!--              @click="videoReception(scope.row)"-->
-<!--              >视频接诊</el-button-->
-<!--            >-->
+            <!--            <el-button-->
+            <!--              class="liner-btn"-->
+            <!--              v-if="scope.row.status == 1"-->
+            <!--              @click="videoReception(scope.row)"-->
+            <!--              >视频接诊</el-button-->
+            <!--            >-->
             <!-- <el-button
               plain
               type="primary"
@@ -144,15 +149,15 @@
               @click="handleUpdate(scope.row)"
               >回复</el-button
             > -->
-<!--            <el-button plain type="primary" @click="handleOver(scope.row)"-->
-<!--              >结束</el-button-->
-<!--            >-->
-<!--            <el-button-->
-<!--              plain-->
-<!--              type="primary"-->
-<!--              @click="handlePrescription(scope.row)"-->
-<!--              >开具处方</el-button-->
-<!--            >-->
+            <!--            <el-button plain type="primary" @click="handleOver(scope.row)"-->
+            <!--              >结束</el-button-->
+            <!--            >-->
+            <!--            <el-button-->
+            <!--              plain-->
+            <!--              type="primary"-->
+            <!--              @click="handlePrescription(scope.row)"-->
+            <!--              >开具处方</el-button-->
+            <!--            >-->
             <el-button
               v-if="scope.row.status == 3 || scope.row.status == 4"
               @click="handleUpdate(scope.row)"
@@ -190,6 +195,7 @@ import {
   overReception,
   countReception,
 } from "@/api/hospital/mytask";
+import { onMounted } from "vue";
 const { proxy } = getCurrentInstance();
 const router = useRouter();
 const route = useRoute();
@@ -197,24 +203,24 @@ const List = ref([]);
 const statusList = ref([
   {
     id: 1,
-    status: '待接诊',
-    count: 0
+    status: "待接诊",
+    count: 0,
   },
   {
     id: 2,
-    status: '接诊中',
-    count: 0
+    status: "接诊中",
+    count: 0,
   },
   {
     id: 3,
-    status: '已完成',
-    count: 0
+    status: "已完成",
+    count: 0,
   },
   {
     id: 4,
-    status: '未接诊',
-    count: 0
-  }
+    status: "未接诊",
+    count: 0,
+  },
 ]);
 const open = ref(false);
 const loading = ref(true);
@@ -238,19 +244,42 @@ const data = reactive({
     visit_time: undefined,
     status: undefined,
     start_time: undefined,
-    end_time: undefined
+    end_time: undefined,
   },
   rules: {},
 });
 
 const { queryParams, form, rules } = toRefs(data);
 
+onMounted(() => {
+  proxy.flooIm.on({
+    loginSuccess: () => {
+      console.log("run loginSuccess");
+    },
+    loginFail: (msg) => {
+      console.log("登陆失败, error: " + msg);
+    },
+    loginMessage: message => {console.log('登录信息相关的----', message)}
+  });
+});
+
+function Register () {
+  proxy.flooIm.userManage.asyncRegister({
+    username: "admin",
+    password: "123456",
+  }).then(() => {
+  console.log("注册成功");
+}).catch(ex => {
+  console.log(ex.message);
+});
+}
+
 /** 查询公告列表 */
 function getList() {
   loading.value = true;
   if (queryParams.value.visit_time) {
-    queryParams.value.start_time = +new Date(queryParams.value.visit_time[0])
-    queryParams.value.end_time = +new Date(queryParams.value.visit_time[1])
+    queryParams.value.start_time = +new Date(queryParams.value.visit_time[0]);
+    queryParams.value.end_time = +new Date(queryParams.value.visit_time[1]);
   }
   listsTask(queryParams.value).then((response) => {
     if (response.code == 200) {
@@ -265,16 +294,15 @@ function getCountReception() {
   countReception().then((res) => {
     const data = res.data;
     const obj = {};
-    data.forEach(item => {
-      obj[item.status] = item.count
-    })
-    statusList.value.forEach(item => {
+    data.forEach((item) => {
+      obj[item.status] = item.count;
+    });
+    statusList.value.forEach((item) => {
       if (obj[item.id]) {
-        item.count = obj[item.id]
+        item.count = obj[item.id];
       }
-    })
+    });
   });
-
 }
 /** 搜索按钮操作 */
 function handleQuery() {
@@ -313,7 +341,7 @@ function handleDelete(row) {
     .catch(() => {});
 }
 /** 患者详情 */
-function toDetail(id){
+function toDetail(id) {
   router.push({
     path: "/doctor/userdetail",
     query: { id: id },
@@ -321,12 +349,33 @@ function toDetail(id){
 }
 /** 接诊 */
 function handleReception(row) {
-  router.push({
-    path: "/reception/chat",
-  });
   // detailTask(row.id).then((res) => {
   //   console.log(res);
   // });
+  // 执行登录操作
+  // saveLoginInfo({
+  //   name: "admin",
+  //   password: "123456",
+  // });
+  // imLogin({
+  //   name: "admin",
+  //   password: "123456",
+  // });
+  router.push({
+    path: "/reception/chat",
+  });
+}
+
+function saveLoginInfo(info) {
+  info.app_id = "dhqtxhnsglwy";
+  window.localStorage.setItem("lanying_im_logininfo", JSON.stringify(info));
+}
+
+function imLogin({ name, password }) {
+  proxy.flooIm.login({
+    name,
+    password,
+  });
 }
 /** 视频接诊 */
 function videoReception(row) {
