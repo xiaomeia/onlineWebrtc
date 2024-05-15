@@ -1,7 +1,8 @@
 <template>
   <div class="header">
     <div class="header_items">
-      <span class="name" @click="touchUserNameHandler">{{ rosterName }}</span>
+<!--      <span class="name" @click="touchUserNameHandler">{{ rosterName }}</span>-->
+      <span class="name">{{ rosterName }} 男 23岁</span>
       <span class="typing" style="padding-left: 10px; color: #111; font-size: 12px" v-if="status">正在输入...</span>
       <div class="delete_button" @click="deleteConversation(getSid)">删除会话</div>
     </div>
@@ -16,6 +17,8 @@ import { useHeaderStore } from '@/store/modules/header';
 const chatviewStore = useChatviewStore();
 const collectionStore = useCollectionStore();
 const headerStore = useHeaderStore();
+import { useMainStore } from'@/store/modules/index'
+const mainStore = useMainStore();
 
 export default {
   name: 'RosterChat',
@@ -46,6 +49,12 @@ export default {
   components: {},
   computed: {
     // ...mapGetters('content', ['getRosterInfo', 'getSid']),
+    getRosterInfo() {
+      return chatviewStore.getRosterInfo
+    },
+    getSid() {
+      return chatviewStore.getSid
+    },
     rosterName() {
       let name = this.getRosterInfo.alias || this.getRosterInfo.nick_name || this.getRosterInfo.username;
       if (!name) {
@@ -71,7 +80,7 @@ export default {
       const also_delete_other_devices = true;
       mainStore.getIm.sysManage.deleteConversation(id, also_delete_other_devices);
       alert('会话删除成功');
-      collectionStore.getConversationList()
+      collectionStore.actionGetConversationList()
       headerStore.actionChangeHeaderStatus('conversation')
       chatviewStore.actionSetType({
         sid: undefined

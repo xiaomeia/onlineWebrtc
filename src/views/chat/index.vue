@@ -1,9 +1,11 @@
 <template>
   <div class="chat-index">
     <audio id="phone_ring_player" src="/audio/phone_ring.mp3" class="hide" autoplay playsinline muted />
-    <Header />
+<!--    <Header />-->
+    <div class="layer_mask" v-if="getShowmask"></div>
     <Contact />
     <Content />
+    <Layers />
   </div>
 </template>
 
@@ -11,12 +13,14 @@
 import Header from './header';
 import Contact from './contact';
 import Content from './content';
+import Layers from './layers';
 import { toNumber } from '@/utils/index';
 import { useCollectionStore } from '@/store/modules/contact';
 import { useLayerStore } from '@/store/modules/layer';
 import { useMainStore } from "@/store/modules/index";
 
 const mainStore = useMainStore();
+const layerStore = useLayerStore()
 // import { useCollectionStore } from '@/stores/collectionStore';
 
 // import { mapGetters } from 'vuex';
@@ -28,12 +32,18 @@ export default {
   components: {
     Header,
     Contact,
-    Content
+    Content,
+    Layers
   },
   data() {
     return {
       callMap: new Map()
     };
+  },
+  computed: {
+    getShowmask() {
+      return layerStore.getShowmask;
+    }
   },
   mounted() {
     console.log('test--------------------------------', this.$root.$options.flooIm)
@@ -61,17 +71,17 @@ export default {
     });
 
     mainStore.getIm.on('recentlistUpdate', () => {
-      collectionStore.getConversationList()
+      collectionStore.actionGetConversationList()
       // this.$store.dispatch('contact/actionGetConversationList');
     });
 
     mainStore.getIm.on('onUnreadChange', () => {
-      collectionStore.getConversationList()
+      collectionStore.actionGetConversationList()
       // this.$store.dispatch('contact/actionGetConversationList');
     });
 
     mainStore.getIm.on('onRosterInfoUpdate', () => {
-      collectionStore.getConversationList()
+      collectionStore.actionGetConversationList()
       // this.$store.dispatch('contact/actionGetConversationList');
     });
 

@@ -1,7 +1,8 @@
 .content {
   background: #fafbfc;
   height: 100%;
-  margin-left: 240px;
+  /*margin-left: 240px;*/
+  margin-left: 320px;
   border-left: 1px solid #e6e6e6;
   border-radius: 0px 0px 10px 0px;
   overflow: hidden;
@@ -31,8 +32,10 @@
 }
 
 .content .header {
-  height: 39px;
-  line-height: 40px;
+  /*height: 39px;*/
+  /*line-height: 40px;*/
+  height: 60px;
+  line-height: 60px;
   position: relative;
   border-bottom: 1px solid #ececec;
   border-radius: 0px;
@@ -116,7 +119,8 @@
   border-radius: 3px;
   margin-left: 6px;
   margin-right: 6px;
-  padding: 0 14px 12px 12px;
+  padding: 12px 14px 12px 12px;
+  /*padding: 0 14px 12px 12px;*/
   line-height: 16px;
   position: relative;
   max-width: 100%;

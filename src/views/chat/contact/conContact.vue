@@ -73,15 +73,20 @@ export default {
     collectionStore.lazyGetGroupList()
     // this.$store.dispatch('contact/actionLazyGetRosterList');
     // this.$store.dispatch('contact/actionLazyGetGroupList');
-    this.showsupports = this.getApp().retrieveAppId() == 'welovemaxim';
-    if (this.showsupports) {
-      this.asyncGetStatics();
-    }
+    // this.showsupports = this.getApp().retrieveAppId() == 'welovemaxim';
+    // if (this.showsupports) {
+    //   this.asyncGetStatics();
+    // }
   },
 
   computed: {
     // // ...mapGetters('contact', ['getRosterList', 'getGroupList']),
-
+    getRosterList() {
+      return collectionStore.getRosterList;
+    },
+    getGroupList() {
+      return collectionStore.getGroupList;
+    },
     token() {
       return mainStore.getIm.userManage.getToken();
     }

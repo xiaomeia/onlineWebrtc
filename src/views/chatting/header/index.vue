@@ -28,7 +28,8 @@
 import { useHeaderStore } from '@/store/modules/header';
 
 const headerStore = useHeaderStore();
-
+import { useMainStore } from'@/store/modules/index'
+const mainStore = useMainStore();
 export default {
   mounted() {
     // this.$store.dispatch('header/actionLazyGetHeaderProfile');

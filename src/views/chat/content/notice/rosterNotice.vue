@@ -16,7 +16,10 @@
 
 <script>
 // import { mapGetters } from 'vuex';
-
+import { useChatviewStore } from '@/store/modules/content';
+import { useMainStore } from'@/store/modules/index'
+const chatviewStore = useChatviewStore();
+const mainStore = useMainStore()
 export default {
   name: 'RosterNotice',
   mounted() {
@@ -29,6 +32,9 @@ export default {
   },
 
   computed: {
+    getSid() {
+      return chatviewStore.getSid
+    },
     // ...mapGetters('content', ['getSid']),
     im() {
       return mainStore.getIm;

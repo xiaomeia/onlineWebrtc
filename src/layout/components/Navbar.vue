@@ -54,6 +54,7 @@
       <el-button icon="Histogram" class="liner-btn" @click="toMyAcount"
         >我的账户</el-button
       >
+      <el-button @click="pushMsg">推送消息</el-button>
     </div>
   </div>
 </template>
@@ -71,7 +72,7 @@ import RuoYiDoc from "@/components/RuoYi/Doc";
 import useAppStore from "@/store/modules/app";
 import useUserStore from "@/store/modules/user";
 import useSettingsStore from "@/store/modules/settings";
-
+import { sendTestImMsg } from '@/api/hospital/mytask';
 const router = useRouter();
 const route = useRoute();
 const appStore = useAppStore();
@@ -116,6 +117,11 @@ function logout() {
 const emits = defineEmits(["setLayout"]);
 function setLayout() {
   emits("setLayout");
+}
+function pushMsg() {
+  sendTestImMsg({targetIds: [1001]}).then(res => {
+    console.log('pushMsg', res);
+  })
 }
 </script>
 

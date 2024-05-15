@@ -82,7 +82,7 @@ export default {
       mainStore.getIm.sysManage.deleteConversation(id, also_delete_other_devices);
       alert('会话删除成功');
 
-      collectionStore.getConversationList()
+      collectionStore.actionGetConversationList()
       headerStore.actionChangeHeaderStatus('conversation')
       chatviewStore.actionSetType({
         sid: undefined

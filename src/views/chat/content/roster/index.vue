@@ -34,6 +34,9 @@ export default {
     Forward
   },
   computed: {
+    getSid() {
+      return chatviewStore.getSid
+    },
     // ...mapGetters('content', ['getSid', 'getMessages', 'getMessageTime'])
   },
   methods: {

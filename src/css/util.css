@@ -12,19 +12,19 @@ body {
   color: #333;
 }
 
-#app {
-  background: #e6e6e6;
-  border-radius: 10px;
-  width: 95%;
-  min-width: 760px;
-  height: 80%;
-  min-height: 400px;
+/*#app {*/
+/*  background: #e6e6e6;*/
+/*  border-radius: 10px;*/
+/*  width: 95%;*/
+/*  min-width: 760px;*/
+/*  height: 80%;*/
+/*  min-height: 400px;*/
 
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
+/*  position: fixed;*/
+/*  left: 50%;*/
+/*  top: 50%;*/
+/*  transform: translate(-50%, -50%);*/
+/*}*/
 
 .ui-index {
   height: 100%;

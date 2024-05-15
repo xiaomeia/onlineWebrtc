@@ -28,13 +28,14 @@ import Setting from './setting/index';
 import RosterNotice from './notice/rosterNotice';
 import GroupInviteNotice from './notice/groupInvitationNotice';
 import GroupApplyNotice from './notice/groupApplyNotice';
+import { useChatviewStore } from '@/store/modules/content';
 
 export default {
   name: 'contentIndex',
   components: {
     RosterInfo,
     // GroupInfo,
-    // RosterChat,
+    RosterChat,
     // GroupChat,
     Setting,
     RosterNotice,
@@ -42,6 +43,9 @@ export default {
     GroupApplyNotice
   },
   computed: {
+    getViewType() {
+      return useChatviewStore().getViewType;
+    }
     // ...mapGetters('chat', ['getViewType'])
   },
   methods: {}

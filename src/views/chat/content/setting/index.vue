@@ -71,6 +71,9 @@ const headerStore  = useHeaderStore()
 import { useLayerStore } from '@/store/modules/layer'
 const layerStore = useLayerStore()
 
+import { useMainStore } from'@/store/modules/index'
+const mainStore = useMainStore();
+
 export default {
   name: 'rosterInfo',
   data() {
@@ -94,7 +97,12 @@ export default {
   components: {},
   computed: {
     // ...mapGetters('setting', ['getSettingInfo', 'getProfileInfo']),
-
+    getSettingInfo () {
+      return settingStore.getSettingInfo;
+    },
+    getProfileInfo () {
+      return settingStore.getProfileInfo;
+    },
     token() {
       return mainStore.getIm.userManage.getToken();
     }

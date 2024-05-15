@@ -376,10 +376,10 @@ function handleReception(row) {
   //   name: "admin",
   //   password: "123456",
   // });
-  // imLogin({
-  //   name: "admin",
-  //   password: "123456",
-  // });
+  imLogin({
+    name: "admin",
+    password: "123456",
+  });
   router.push({
     path: "/reception/chat",
   });

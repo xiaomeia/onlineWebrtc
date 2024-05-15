@@ -105,6 +105,7 @@
 // };
 
 // forwardStore.js
+import { useMainStore } from './index'
 export const useForwardStore = defineStore('forward', {
   state: () => ({
     rosterList: [],
@@ -121,13 +122,13 @@ export const useForwardStore = defineStore('forward', {
 
   actions: {
     async actionGetForwardList() {
-      const rosterManage = useRosterManageStore();
-      const groupManage = useGroupManageStore();
+      // const rosterManage = useRosterManageStore();
+      // const groupManage = useGroupManageStore();
 
       if (!this.rosterList.length && !this.groupList.length) {
-        const rosterIds = await rosterManage.asyncGetRosterIdList();
-        await rosterManage.asnycGetRosterListDetailByIds(rosterIds);
-        const allMaps = rosterManage.getAllRosterDetail() || {};
+        const rosterIds = await useMainStore().im.rosterManage.asyncGetRosterIdList();
+        await useMainStore().im.rosterManage.asnycGetRosterListDetailByIds(rosterIds);
+        const allMaps = await useMainStore().im.rosterManage.getAllRosterDetail() || {};
         const retObj = rosterIds.map((i) => {
           const rosterInfo = allMaps[i] || { user_id: i };
           return {
@@ -137,7 +138,7 @@ export const useForwardStore = defineStore('forward', {
         });
         this.rosterList = [...retObj];
 
-        const groups = await groupManage.asyncGetJoinedGroups();
+        const groups = await useMainStore().im.groupManage.asyncGetJoinedGroups();
         const groupRetObj = (groups || []).map((i) => {
           return {
             name: i.name,
@@ -153,8 +154,8 @@ export const useForwardStore = defineStore('forward', {
       this.showForwardList = true;
     },
 
-    actionForwardMessage(param) {
-      const sysManage = useSysManageStore();
+    async actionForwardMessage(param) {
+      // const sysManage = useSysManageStore();
       const { type, id: xid } = param;
       const fmsg = {};
       if (type === 'roster') {
@@ -163,7 +164,7 @@ export const useForwardStore = defineStore('forward', {
         fmsg.gid = xid;
       }
       fmsg.mid = this.forwardMessage.id;
-      sysManage.forwardMessage(fmsg);
+      await useMainStore().im.sysManage.forwardMessage(fmsg);
       this.showForwardList = false;
     },
 

@@ -5,12 +5,12 @@
       <div @click="headerAddChickHandler" class="addBtn"></div>
     </div>
     <div class="tab">
-      <div @click="touchRecent" class="stab">
-        <img :src="convImage" />
-        <span :class="{ none: getTotalUnread === '' }" class="unread_number">{{ getTotalUnread }}</span>
-      </div>
-      <div @click="touchContact" class="stab"><img :src="contactImage" /></div>
-      <div @click="touchSetting" class="stab"><img :src="settingImage" /></div>
+<!--      <div @click="touchRecent" class="stab">-->
+<!--        <img :src="convImage" />-->
+<!--        <span :class="{ none: getTotalUnread === '' }" class="unread_number">{{ getTotalUnread }}</span>-->
+<!--      </div>-->
+<!--      <div @click="touchContact" class="stab"><img :src="contactImage" /></div>-->
+<!--      <div @click="touchSetting" class="stab"><img :src="settingImage" /></div>-->
       <div @click="touchSafariAudioSupport" class="stab" v-if="checkSafari">
         <img :src="audioImage" />
         <span class="supportname">点击获取振铃权限</span>
@@ -30,7 +30,9 @@ import { useChatviewStore } from '@/store/modules/content';
 import { useCollectionStore } from '@/store/modules/contact';
 import { useHeaderStore } from '@/store/modules/header';
 import { useLayerStore } from '@/store/modules/layer';
+import { useMainStore } from'@/store/modules/index'
 
+const mainStore = useMainStore();
 const chatviewStore = useChatviewStore();
 const collectionStore = useCollectionStore();
 const headerStore = useHeaderStore();
@@ -87,6 +89,18 @@ export default {
     // },
     token() {
       return mainStore.getIm.userManage.getToken();
+    },
+    getHeaderStatus() {
+      return headerStore.getHeaderStatus;
+    },
+    getUserProfile() {
+      return headerStore.getUserProfile;
+    },
+    getSupportSafariAudio() {
+      return headerStore.getSupportSafariAudio;
+    },
+    getTotalUnread() {
+      return collectionStore.getTotalUnread;
     }
   },
 

@@ -33,6 +33,15 @@ export default {
   computed: {
     // ...mapGetters('content', ['getSid', 'getMessages', 'getMessageTime']),
     // ...mapGetters('forward', ['getRosterList', 'getGroupList', 'getShowForwardList'])
+    getRosterList() {
+      return forwardStore.getRosterList
+    },
+    getGroupList() {
+      return forwardStore.getGroupList
+    },
+    getShowForwardList() {
+      return forwardStore.getShowForwardList
+    }
   },
 
   methods: {

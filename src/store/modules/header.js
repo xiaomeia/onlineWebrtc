@@ -74,10 +74,11 @@ const headerRequestFlag = {
 
 // headerStore.js
 // import { defineStore } from 'pinia';
-
+import { useMainStore } from './index'
+const mainStore = useMainStore()
 export const useHeaderStore = defineStore('header', {
   state: () => ({
-    headerStatus: 'contact',
+    headerStatus: 'conversation',
     userProfile: {},
     supportSafariAudio: false
   }),
@@ -99,7 +100,7 @@ export const useHeaderStore = defineStore('header', {
 
     async actionGetHeaderProfile() {
       // todo
-      const userManage = useUserManageStore();
+      const userManage = mainStore.im.useUserManageStore();
       const profile = await userManage.asyncGetProfile(true);
       this.userProfile = profile;
     },

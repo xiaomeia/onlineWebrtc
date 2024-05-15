@@ -366,7 +366,7 @@
 // chatviewStore.js
 // import { defineStore } from 'pinia';
 import { toNumber, toLong } from '@/utils/index';
-
+import { useMainStore } from './index'
 export const useChatviewStore = defineStore('chatview', {
   state: () => ({
     viewType: '',
@@ -526,32 +526,38 @@ export const useChatviewStore = defineStore('chatview', {
     },
 
     async actionUpdateRoster() {
-      const rosterManage = useRosterManageStore();
-      const rosterInfo = await rosterManage.asyncGetRosterInfo(this.sid, true);
+      // const rosterManage = useRosterManageStore();
+      // const rosterInfo = await rosterManage.asyncGetRosterInfo(this.sid, true);
+      // this.setRosterInfo(rosterInfo);
+      const rosterInfo = await useMainStore().im.rosterManage.asyncGetRosterInfo(this.sid, true)
       this.setRosterInfo(rosterInfo);
     },
 
     async actionUpdateGroup() {
-      const groupManage = useGroupManageStore();
-      const groupInfo = await groupManage.asyncGetGroupInfo(this.sid);
+      // const groupManage = useGroupManageStore();
+      // const groupInfo = await groupManage.asyncGetGroupInfo(this.sid);
+      const groupInfo = await useMainStore().im.groupManage.asyncGetGroupInfo(this.sid)
       this.setGroupInfo(groupInfo);
     },
 
-    actionUpdateMemberList() {
-      const groupManage = useGroupManageStore();
-      const members = groupManage.getGroupMembers(this.sid);
+    async actionUpdateMemberList() {
+      // const groupManage = useGroupManageStore();
+      // const members = groupManage.getGroupMembers(this.sid);
+      const members = await useMainStore().im.groupManage.getGroupMembers(this.sid)
       this.setMemberList(members);
     },
 
-    actionRequireMessage() {
-      const rosterManage = useRosterManageStore();
-      const groupManage = useGroupManageStore();
+    async actionRequireMessage() {
+      // const rosterManage = useRosterManageStore();
+      // const groupManage = useGroupManageStore();
+      const rosterManage = useMainStore().im.rosterManage;
+      const groupManage = useMainStore().im.groupManage;
 
       let localMessages = undefined;
       if (this.viewType === 'rosterchat') {
-        localMessages = rosterManage.getRosterMessageByRid(this.sid);
+        localMessages = await rosterManage.getRosterMessageByRid(this.sid);
       } else if (this.viewType === 'groupchat') {
-        localMessages = groupManage.getGruopMessage(this.sid);
+        localMessages = await groupManage.getGruopMessage(this.sid);
       }
 
       if (localMessages) {
@@ -571,8 +577,8 @@ export const useChatviewStore = defineStore('chatview', {
         this.queryHistoryMessageId = data.next;
       }
 
-      const userManage = useUserManageStore();
-      const uid = userManage.getUid();
+      // const userManage = useUserManageStore();
+      const uid = useMainStore().im.userManage.getUid();
       const oldMessages = this.messages || [];
 
       let allMessages = [];
@@ -646,10 +652,10 @@ export const useChatviewStore = defineStore('chatview', {
     },
 
     queryHistory() {
-      const sysManage = useSysManageStore();
+      // const sysManage = useSysManageStore();
       const mid = this.queryHistoryMessageId || 0;
       const amount = 20;
-      sysManage.requireHistoryMessage(this.sid, mid, amount);
+      useMainStore().im.sysManage.requireHistoryMessage(this.sid, mid, amount);
 
       this.recordHistoryQuery();
     },

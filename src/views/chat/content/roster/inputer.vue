@@ -4,7 +4,7 @@
       <input @change="fileChangeHandler" ref="fileRef" type="file" />
       <span v-popover:tooltip.top="'发送图片'" @click="imageUploadClickHandler" class="ico image"></span>
       <span v-popover:tooltip.top="'发送文件'" @click="fileUploadClickHandler" class="ico file"></span>
-      <span v-popover:tooltip.top="'发送位置'" @click="locationClickHandler" class="ico location"></span>
+<!--      <span v-popover:tooltip.top="'发送位置'" @click="locationClickHandler" class="ico location"></span>-->
       <span v-popover:tooltip.top="'视频通话'" @click="videoCallClickHandler" class="ico videocall"></span>
       <span v-popover:tooltip.top="'语音通话'" @click="audioCallClickHandler" class="ico audiocall"></span>
     </div>
@@ -18,8 +18,12 @@
 // import { mapGetters } from 'vuex';
 import { useCollectionStore } from '@/store/modules/contact';
 import { useLayerStore } from '@/store/modules/layer';
+import { useChatviewStore } from '@/store/modules/content';
+import { useMainStore } from'@/store/modules/index'
+const mainStore = useMainStore();
 const collectionStore = useCollectionStore();
 const layerStore = useLayerStore()
+const chatviewStore = useChatviewStore()
 export default {
   name: 'rosterInputer',
   data() {
@@ -30,6 +34,12 @@ export default {
   },
   components: {},
   computed: {
+    getSid() {
+      return chatviewStore.getSid
+    },
+    getIntentMessage() {
+      return chatviewStore.getIntentMessage
+    },
     // ...mapGetters('content', ['getSid', 'getIntentMessage']),
     im() {
       return mainStore.getIm;
@@ -74,9 +84,10 @@ export default {
     },
 
     videoCallClickHandler() {
-      collectionStore.setCallId(this.im.userManage.getUid().toString() + '_' + Date.now())
+      console.log('videoCallClickHandler');
       layerStore.actionSetShowing('videocall')
-      layerStore.actionSetShowmask(true)
+      layerStore.actionSetShowmask('true')
+      collectionStore.setCallId(this.im.userManage.getUid().toString() + '_' + Date.now())
       // this.$store.dispatch('layer/actionSetShowing', 'videocall');
       // this.$store.dispatch('layer/actionSetShowmask', 'true');
       // this.$store.dispatch('contact/actionSetCallId', this.im.userManage.getUid().toString() + '_' + Date.now());

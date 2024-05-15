@@ -15,7 +15,8 @@ import Message from './renderMsg.vue';
 import { numToString, toNumber } from '@/utils/index';
 import { useChatviewStore } from '@/store/modules/content';
 const chatviewStore = useChatviewStore();
-
+import { useMainStore } from'@/store/modules/index'
+const mainStore = useMainStore();
 // import { mapGetters } from 'vuex';
 // var JSONBigString = require('json-bigint');
 
@@ -124,6 +125,18 @@ export default {
 
   computed: {
     // ...mapGetters('content', ['getSid', 'getMessages', 'getMessageTime', 'getScroll']),
+    getSid() {
+      return chatviewStore.getSid
+    },
+    getMessages() {
+      return chatviewStore.getMessages
+    },
+    getMessageTime() {
+      return chatviewStore.getMessageTime
+    },
+    getScroll() {
+      return chatviewStore.getScroll
+    },
     allMessages() {
       let msgs = this.getMessages || [];
       msgs = msgs.filter((item) => {

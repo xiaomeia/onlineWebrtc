@@ -46,7 +46,8 @@
 
 <script>
 // import { mapGetters } from 'vuex';
-
+import { useMainStore } from'@/store/modules/index'
+const mainStore = useMainStore();
 export default {
   data() {
     return {

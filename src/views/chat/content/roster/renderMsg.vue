@@ -89,6 +89,8 @@ import { numToString, toNumber } from '@/utils/index.js';
 import { useChatviewStore } from '@/store/modules/content';
 import { useLayerStore } from '@/store/modules/layer';
 import { useForwardStore } from '@/store/modules/forward';
+import { useMainStore } from'@/store/modules/index'
+const mainStore = useMainStore();
 const chatviewStore = useChatviewStore();
 const layerStore = useLayerStore()
 const forwardStore = useForwardStore()
@@ -166,6 +168,12 @@ export default {
   },
   props: ['message'],
   computed: {
+    getSid() {
+      return chatviewStore.getSid
+    },
+    getMessageTime() {
+      return chatviewStore.getMessageTime
+    },
     // ...mapGetters('content', ['getSid', 'getMessageTime']),
     timeMessage() {
       let { timestamp } = this.message;

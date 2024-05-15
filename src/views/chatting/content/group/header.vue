@@ -13,9 +13,10 @@
 </template>
 
 <script>
+import { useMainStore } from'@/store/modules/index'
 // import { mapGetters } from 'vuex';
 import { toNumber } from '@/utils/index';
-
+const mainStore = useMainStore();
 export default {
   name: 'GroupChat',
   data() {

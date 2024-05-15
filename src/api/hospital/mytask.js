@@ -46,3 +46,19 @@ export function countReception() {
     method: 'get'
   })
 }
+// 我的接诊
+export function myListsTask(query) {
+  return request({
+    url: '/reception/my',
+    method: 'get',
+    params: query
+  })
+}
+// 推送消息
+export function sendTestImMsg(data) {
+  return request({
+    url: '/reception/send-test-im-msg',
+    method: 'post',
+    data: data
+  })
+}

@@ -38,6 +38,8 @@ import { useHeaderStore } from '@/store/modules/header';
 const chatviewStore = useChatviewStore();
 const collectionStore = useCollectionStore();
 const headerStore = useHeaderStore();
+import { useMainStore } from'@/store/modules/index'
+const mainStore = useMainStore();
 
 export default {
   name: 'rosterInfo',
@@ -62,6 +64,12 @@ export default {
   },
   components: {},
   computed: {
+    getSid() {
+      return chatviewStore.getSid
+    },
+    getRosterList() {
+      return collectionStore.getRosterList
+    },
     // ...mapGetters('content', ['getSid']),
     // ...mapGetters('contact', ['getRosterList']),
     rosterName() {
@@ -101,7 +109,7 @@ export default {
           if (!value) return;
           im.rosterManage.asyncUpdateRosterAlias({ user_id: this.getSid, alias: value }).then(() => {
             chatviewStore.actionUpdateRoster()
-            collectionStore.getConversationList()
+            collectionStore.actionGetConversationList()
             collectionStore.lazyGetRosterList()
             // this.$store.dispatch('content/actionUpdateRoster');
             // this.$store.dispatch('contact/actionGetConversationList');

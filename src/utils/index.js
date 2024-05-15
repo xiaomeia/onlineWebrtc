@@ -1,5 +1,5 @@
 import { parseTime } from './ruoyi'
-
+import Long from 'long';
 /**
  * 表格时间格式化
  */

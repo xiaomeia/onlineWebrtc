@@ -8,7 +8,9 @@
 <script>
 import ConContact from './conContact.vue';
 import ConConversation from './conConversation.vue';
+import { useHeaderStore } from '@/store/modules/header';
 
+const headerStore = useHeaderStore()
 // import { mapGetters } from 'vuex';
 
 export default {
@@ -20,10 +22,10 @@ export default {
   computed: {
     // ...mapGetters('header', ['getHeaderStatus']),
     showContact() {
-      return this.getHeaderStatus === 'contact';
+      return headerStore.getHeaderStatus === 'contact';
     },
     showConversation() {
-      return this.getHeaderStatus === 'conversation';
+      return headerStore.getHeaderStatus === 'conversation';
     }
   },
   methods: {}
