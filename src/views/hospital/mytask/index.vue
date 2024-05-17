@@ -259,7 +259,7 @@ onMounted(() => {
   // 挂载一个聊天方法到全局
   const config = {
     //dnsServer: "https://dns.lanyingim.com/v2/app_dns",
-    appid: "dhqtxhnsglwy",
+    appid: "eoimpdixgkmq",
     ws: false, // uniapp版需要设置为true, web版需要设置为false
     autoLogin: true,
   };
@@ -377,8 +377,8 @@ function handleReception(row) {
   //   password: "123456",
   // });
   imLogin({
-    name: "admin",
-    password: "123456",
+    name: "test_user",
+    password: "111111",
   });
   router.push({
     path: "/reception/chat",
@@ -386,7 +386,7 @@ function handleReception(row) {
 }
 
 function saveLoginInfo(info) {
-  info.app_id = "dhqtxhnsglwy";
+  info.app_id = "eoimpdixgkmq";
   window.localStorage.setItem("lanying_im_logininfo", JSON.stringify(info));
 }
 

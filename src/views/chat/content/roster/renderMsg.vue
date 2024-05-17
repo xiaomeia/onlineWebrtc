@@ -35,8 +35,45 @@
           <div class="c_content" :style="{ 'padding-bottom': showMarkdown ? '0px' : '' }">
             <div v-if="message.type === 'text'">
               <div v-if="showMarkdown" v-html="showMarkdownContent" class="c_markdown" />
-              <div v-else>
-                {{ showContent }}
+              <div class="ext-con" v-else>
+                <div class="ext-con-box" v-if="isExt">
+                  <template v-if="msgCode === '1001'">
+                    {{ parseContent.greeting }}
+                  </template>
+                  <template v-if="msgCode === '1002'">
+                    <div class="card-title">
+                      视频电话问诊申请
+                    </div>
+                    <div>真实姓名：{{parseContent.real_name}}</div>
+                    <div>性别: {{parseContent.sex}} {{parseContent.age}}</div>
+                    <div>身份证号：{{parseContent.idcard}}</div>
+                    <div>疾病史：{{parseContent.past_history}}</div>
+                    <div>确诊疾病：{{parseContent.disease}}</div>
+                    <div>预约视频问诊时间：{{parseContent.consultation_time}}</div>
+                    <div class="border-bottom">预约电话号码：{{parseContent.mobile}}</div>
+                    <div>
+                      <button class="btn">确认完成</button>
+                      <button class="btn">开具药方</button>
+                      <button class="btn liner-btn">发起视频</button>
+                    </div>
+                  </template>
+                  <template v-if="msgCode === '1003'">
+                    <div class="card-title align-center">已对{{ parseContent.doctor_name }}患者发起视频问诊</div>
+                    <div class="border-bottom waiting align-center">等待对方接受...</div>
+                    <div class="align-center mt15">预约视频问诊时间：{{parseContent.consultation_time}}</div>
+                  </template>
+                  <template v-if="msgCode === '1004'">
+                    <div class="card-title">请核实确诊信息并确认取药</div>
+                    <div class="drug-con">
+                      <div v-for="drug of parseContent.drugs">
+                        {{drug.name}} ￥{{drug.price}} {{drug.number}}{{drug.unit}}
+                      </div>
+                    </div>
+                    <div class="border-bottom">诊断结果：{{parseContent.diagnostic_result}}</div>
+                    <div class="right"><button class="btn">修改药方</button></div>
+                  </template>
+                </div>
+                <template v-else>{{ showContent }}</template>
               </div>
               <div class="c_content_ext" v-if="showExt">ext: {{ message.ext }}</div>
             </div>
@@ -122,7 +159,8 @@ export default {
       showTotalContent: '',
       showAppendContent: '',
       appendMarkdownTimer: null,
-      lastMarkdownSliceStreamTime: 0
+      lastMarkdownSliceStreamTime: 0,
+      // msgCode: 0
     };
   },
   mounted() {
@@ -168,6 +206,20 @@ export default {
   },
   props: ['message'],
   computed: {
+    isExt() {
+      const regex = /^(1001-|1002-|1003-|1004-)/;
+      return regex.test(this.showContent);
+    },
+    msgCode() {
+      const str = this.showContent.substring(0, 4)
+      return str
+    },
+    parseContent() {
+      const base64Msg = this.showContent.split(this.msgCode + '-')[1]
+      const decodedString = window.atob(base64Msg);
+      const parseString = JSON.parse(decodedString)
+      return parseString
+    },
     getSid() {
       return chatviewStore.getSid
     },
@@ -291,6 +343,13 @@ export default {
   },
 
   methods: {
+    trimMatchingQuotes(str) {
+      // 检查字符串开头结尾是否有相同的引号，并删除它们
+      if ((str.startsWith('"') && str.endsWith('"')) || (str.startsWith("'") && str.endsWith("'"))) {
+        return str.slice(1, -1);
+      }
+      return str;
+    },
     getImage({ url = '', thumbnail = true }) {
       if (!url) {
         const attach = this.message.attach || {};
@@ -629,3 +688,57 @@ export default {
   }
 };
 </script>
+<style scoped lang="scss">
+.ext-con-box {
+  min-width: 360px;
+}
+.card-title {
+  font-weight: 500;
+  font-size: 16px;
+}
+.ext-con {
+  div {
+    line-height: 25px;
+  }
+  .border-bottom {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 20px;
+  }
+  .waiting {
+    font-weight: 500;
+    font-size: 20px;
+    color: #8F56F1;
+    margin-top: 15px;
+  }
+  .btn {
+    color: #8F56F1;
+    width: 110px;
+    height: 40px;
+    border-radius: 4px;
+    border: 1px solid #8F56F1;
+    background: #fff;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  .btn + .btn {
+    margin-left: 12px;
+  }
+  .liner-btn {
+    background: linear-gradient(45deg, #9357f2, #c969ec);
+  }
+  .right {
+    text-align: right;
+  }
+  .align-center {
+    text-align: center;
+  }
+  .mt15 {
+    margin-top: 15px;
+  }
+  .drug-con {
+    background: #F8F7FA;
+    padding: 15px;
+    margin: 15px 0;
+  }
+}
+</style>

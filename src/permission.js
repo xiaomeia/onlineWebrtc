@@ -24,7 +24,6 @@ router.beforeEach((to, from, next) => {
       next({ path: '/' })
       NProgress.done()
     } else {
-      console.log(444);
       if (useUserStore().roles.length === 0) {
         console.log('router111',from);
         isRelogin.show = true
