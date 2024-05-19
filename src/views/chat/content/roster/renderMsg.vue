@@ -11,90 +11,187 @@
         <div :class="{ user_content: true, self: isSelf, roster: !isSelf }">
           <div class="c_content_more">
             <div class="c_content_text_more" v-if="message.type === 'text'">
-              <span class="c_ext_title" v-if="isMarkdown" @click="changeShowMarkdownFormat">{{ showMarkdownTitle }}</span>
-              <span class="c_ext_title" v-if="message.ext" @click="changeShowExt">{{ showExtTitle }}</span>
+              <span
+                class="c_ext_title"
+                v-if="isMarkdown"
+                @click="changeShowMarkdownFormat"
+                >{{ showMarkdownTitle }}</span
+              >
+              <span
+                class="c_ext_title"
+                v-if="message.ext"
+                @click="changeShowExt"
+                >{{ showExtTitle }}</span
+              >
             </div>
-            <el-popover :placement="isSelf ? 'left' : 'right'" trigger="hover" width="70">
+            <el-popover
+              :placement="isSelf ? 'left' : 'right'"
+              trigger="hover"
+              width="70"
+            >
               <div class="messageExt">
-                <div @click="deleteMessage" class="item delete" v-if="!message.h">删除</div>
+                <div
+                  @click="deleteMessage"
+                  class="item delete"
+                  v-if="!message.h"
+                >
+                  删除
+                </div>
                 <div @click="forwardMessage" class="recall item">转发</div>
-                <div @click="recallMessage" class="recall item" v-if="isSelf && !message.h">撤回</div>
+                <div
+                  @click="recallMessage"
+                  class="recall item"
+                  v-if="isSelf && !message.h"
+                >
+                  撤回
+                </div>
 
-                <div class="msgStatus item item" v-if="isSelf && messageStatus === 'unread' && !message.h">未读</div>
-                <div class="msgStatus item" v-if="isSelf && messageStatus === 'delivered' && !message.h">送达</div>
-                <div class="msgStatus item" v-if="isSelf && messageStatus === 'read' && !message.h">已读</div>
+                <div
+                  class="msgStatus item item"
+                  v-if="isSelf && messageStatus === 'unread' && !message.h"
+                >
+                  未读
+                </div>
+                <div
+                  class="msgStatus item"
+                  v-if="isSelf && messageStatus === 'delivered' && !message.h"
+                >
+                  送达
+                </div>
+                <div
+                  class="msgStatus item"
+                  v-if="isSelf && messageStatus === 'read' && !message.h"
+                >
+                  已读
+                </div>
 
-                <div class="unread item" v-if="messageStatus === 'unread' && !isSelf && !message.h">未读</div>
-                <div @click="unreadMessage" class="set_unread item" v-if="messageStatus !== 'unread' && !isSelf && !message.h">设置未读</div>
+                <div
+                  class="unread item"
+                  v-if="messageStatus === 'unread' && !isSelf && !message.h"
+                >
+                  未读
+                </div>
+                <div
+                  @click="unreadMessage"
+                  class="set_unread item"
+                  v-if="messageStatus !== 'unread' && !isSelf && !message.h"
+                >
+                  设置未读
+                </div>
               </div>
               <div class="h_image" slot="reference">
                 <img src="/image/more.png" />
               </div>
             </el-popover>
           </div>
-          <div class="c_content" :style="{ 'padding-bottom': showMarkdown ? '0px' : '' }">
+          <div
+            class="c_content"
+            :style="{ 'padding-bottom': showMarkdown ? '0px' : '' }"
+          >
             <div v-if="message.type === 'text'">
-              <div v-if="showMarkdown" v-html="showMarkdownContent" class="c_markdown" />
+              <div
+                v-if="showMarkdown"
+                v-html="showMarkdownContent"
+                class="c_markdown"
+              />
               <div class="ext-con" v-else>
                 <div class="ext-con-box" v-if="isExt">
                   <template v-if="msgCode === '1001'">
                     {{ parseContent.greeting }}
                   </template>
                   <template v-if="msgCode === '1002'">
-                    <div class="card-title">
-                      视频电话问诊申请
+                    <div class="card-title">视频电话问诊申请</div>
+                    <div>真实姓名：{{ parseContent.real_name }}</div>
+                    <div>
+                      性别: {{ parseContent.sex }} {{ parseContent.age }}
                     </div>
-                    <div>真实姓名：{{parseContent.real_name}}</div>
-                    <div>性别: {{parseContent.sex}} {{parseContent.age}}</div>
-                    <div>身份证号：{{parseContent.idcard}}</div>
-                    <div>疾病史：{{parseContent.past_history}}</div>
-                    <div>确诊疾病：{{parseContent.disease}}</div>
-                    <div>预约视频问诊时间：{{parseContent.consultation_time}}</div>
-                    <div class="border-bottom">预约电话号码：{{parseContent.mobile}}</div>
+                    <div>身份证号：{{ parseContent.idcard }}</div>
+                    <div>疾病史：{{ parseContent.past_history }}</div>
+                    <div>确诊疾病：{{ parseContent.disease }}</div>
+                    <div>
+                      预约视频问诊时间：{{ parseContent.consultation_time }}
+                    </div>
+                    <div class="border-bottom">
+                      预约电话号码：{{ parseContent.mobile }}
+                    </div>
                     <div>
                       <button class="btn">确认完成</button>
                       <button class="btn">开具药方</button>
-                      <button class="btn liner-btn">发起视频</button>
+                      <button class="btn liner-btn" @click="call">
+                        发起视频
+                      </button>
                     </div>
                   </template>
                   <template v-if="msgCode === '1003'">
-                    <div class="card-title align-center">已对{{ parseContent.doctor_name }}患者发起视频问诊</div>
-                    <div class="border-bottom waiting align-center">等待对方接受...</div>
-                    <div class="align-center mt15">预约视频问诊时间：{{parseContent.consultation_time}}</div>
+                    <div class="card-title align-center">
+                      已对{{ parseContent.doctor_name }}患者发起视频问诊
+                    </div>
+                    <div class="border-bottom waiting align-center">
+                      等待对方接受...
+                    </div>
+                    <div class="align-center mt15">
+                      预约视频问诊时间：{{ parseContent.consultation_time }}
+                    </div>
                   </template>
                   <template v-if="msgCode === '1004'">
                     <div class="card-title">请核实确诊信息并确认取药</div>
                     <div class="drug-con">
                       <div v-for="drug of parseContent.drugs">
-                        {{drug.name}} ￥{{drug.price}} {{drug.number}}{{drug.unit}}
+                        {{ drug.name }} ￥{{ drug.price }} {{ drug.number
+                        }}{{ drug.unit }}
                       </div>
                     </div>
-                    <div class="border-bottom">诊断结果：{{parseContent.diagnostic_result}}</div>
-                    <div class="right"><button class="btn">修改药方</button></div>
+                    <div class="border-bottom">
+                      诊断结果：{{ parseContent.diagnostic_result }}
+                    </div>
+                    <div class="right">
+                      <button class="btn">修改药方</button>
+                    </div>
                   </template>
                 </div>
                 <template v-else>{{ showContent }}</template>
               </div>
-              <div class="c_content_ext" v-if="showExt">ext: {{ message.ext }}</div>
+              <div class="c_content_ext" v-if="showExt">
+                ext: {{ message.ext }}
+              </div>
             </div>
             <div v-if="message.type === 'rtc'">
               {{ message.content }}
             </div>
             <div v-if="message.type === 'image'">
-              <img class="c_image" :src="attachImage" @click="touchImage" v-if="attachImage !== ''" />
+              <img
+                class="c_image"
+                :src="attachImage"
+                @click="touchImage"
+                v-if="attachImage !== ''"
+              />
             </div>
-            <div @click="playAudio" class="audio_frame" v-if="message.type === 'audio'">
+            <div
+              @click="playAudio"
+              class="audio_frame"
+              v-if="message.type === 'audio'"
+            >
               <img class="audio" src="/image/audio.png" />
             </div>
-            <div @click="playVideo" class="video_frame" v-if="message.type === 'video'">
+            <div
+              @click="playVideo"
+              class="video_frame"
+              v-if="message.type === 'video'"
+            >
               <img :src="videoImage" class="preview c_image" />
               <img class="play" src="/image/play.png" />
             </div>
             <div class="loc_frame" v-if="message.type === 'file'">
               <img class="loc" src="/image/file2.png" />
-              <span @click="downloadFile" class="loc_txt">{{ attachName }}</span>
+              <span @click="downloadFile" class="loc_txt">{{
+                attachName
+              }}</span>
             </div>
-            <div @click="openLocation" class="loc_frame" v-if="message.type === 'location'">
+            <div
+              @click="openLocation"
+              class="loc_frame"
+              v-if="message.type === 'location'"
+            >
               <img class="loc" src="/image/loc.png" />
               <span class="loc_txt">{{ attachLocation.addr }}</span>
             </div>
@@ -109,6 +206,14 @@
     <div v-if="messageType===4">
       renderUserNotice
     </div> -->
+    <div class="video-modal" v-show="visible">
+      <div class="modal-overlay" @click="closeModal"></div>
+      <div class="modal-content">
+        <!-- <video ref="videoPlayer" autoplay></video> -->
+        <div ref="local"></div>
+        <el-button @click="closeModal">关闭</el-button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -116,51 +221,63 @@
 // import Chat from "./chat.vue";
 // import Inputer from "./inputer.vue";
 // import moment from 'moment';
-import { numToString, toNumber } from '@/utils/index.js';
+import { numToString, toNumber } from "@/utils/index.js";
 // import { mapGetters } from 'vuex';
 // import { Marked } from '../../../third/marked.min.js';
 // import { markedHighlight } from 'marked-highlight';
 // import hljs from 'highlight.js';
 // import 'highlight.js/styles/atom-one-light.css';
 // var JSONBigString = require('json-bigint');
-import { useChatviewStore } from '@/store/modules/content';
-import { useLayerStore } from '@/store/modules/layer';
-import { useForwardStore } from '@/store/modules/forward';
-import { useMainStore } from'@/store/modules/index'
+import { useChatviewStore } from "@/store/modules/content";
+import { useLayerStore } from "@/store/modules/layer";
+import { useForwardStore } from "@/store/modules/forward";
+import { useMainStore } from "@/store/modules/index";
 const mainStore = useMainStore();
 const chatviewStore = useChatviewStore();
-const layerStore = useLayerStore()
-const forwardStore = useForwardStore()
+const layerStore = useLayerStore();
+const forwardStore = useForwardStore();
+
+import DingRTC from "dingrtc";
 
 export default {
-  name: 'RosterChat',
+  name: "RosterChat",
   data() {
     return {
+      visible: false,
+      stream: null,
       system_roster: {
-        name: '系统通知',
-        avatar: '/image/setting.png'
+        name: "系统通知",
+        avatar: "/image/setting.png",
       },
       showExt: false,
-      showExtTitle: ' 显示扩展 ',
-      showMarkdownTitle: ' 显示原文 ',
+      showExtTitle: " 显示扩展 ",
+      showMarkdownTitle: " 显示原文 ",
       isMarkdown: false,
       showMarkdown: false,
       marked: null,
       addHlgs: false,
-      content: '',
-      markContent: '',
+      content: "",
+      markContent: "",
 
-      showContent: '',
-      appendContent: '',
+      showContent: "",
+      appendContent: "",
       appendTimer: null,
       lastSliceStreamTime: 0,
 
-      showMarkdownContent: '',
-      showTotalContent: '',
-      showAppendContent: '',
+      showMarkdownContent: "",
+      showTotalContent: "",
+      showAppendContent: "",
       appendMarkdownTimer: null,
       lastMarkdownSliceStreamTime: 0,
       // msgCode: 0
+      joinInfo: {
+        appId: "49idbu4a",
+        token:
+          "000eJxjYGBQMKh45eNovi3yTJY0twxnKZfX0WUrHSaxMmhr/fW/f6BkLQMDA4eJZWZKUqlJYprn9LObTjecSfN66QsUZzY0MgZSjIYMjAyjYAgCAJPjF1g=",
+        uid: 1,
+        channel: 123,
+        userName: "test",
+      },
     };
   },
   mounted() {
@@ -170,9 +287,12 @@ export default {
     let { timestamp } = this.message;
     timestamp = toNumber(timestamp);
     const savedMessageTime = this.getMessageTime;
-    const last = (savedMessageTime.length && savedMessageTime[savedMessageTime.length - 1]) || 0;
+    const last =
+      (savedMessageTime.length &&
+        savedMessageTime[savedMessageTime.length - 1]) ||
+      0;
     if (timestamp - last > 5 * 60 * 1000) {
-      chatviewStore.actionUpdateMessageTime(timestamp)
+      chatviewStore.actionUpdateMessageTime(timestamp);
       // this.$store.dispatch('content/actionUpdateMessageTime', timestamp);
     }
 
@@ -185,11 +305,16 @@ export default {
       if (im) im.rosterManage.readRosterMessage(this.getSid, this.message.id);
     }
     let { type } = this.message;
-    if (type === 'text') {
+    if (type === "text") {
       this.calculateContent(this.message.content);
     }
 
-    if (!this.message.isHistory && this.message.ext && this.message.ext.length && this.isAIStreamFinish(this.message.ext)) {
+    if (
+      !this.message.isHistory &&
+      this.message.ext &&
+      this.message.ext.length &&
+      this.isAIStreamFinish(this.message.ext)
+    ) {
       if (this.showMarkdown) {
         this.calculateMarkdownAppend(this.message.content, this.message.ext);
       }
@@ -204,27 +329,27 @@ export default {
     // Chat,
     // Inputer
   },
-  props: ['message'],
+  props: ["message"],
   computed: {
     isExt() {
       const regex = /^(1001-|1002-|1003-|1004-)/;
       return regex.test(this.showContent);
     },
     msgCode() {
-      const str = this.showContent.substring(0, 4)
-      return str
+      const str = this.showContent.substring(0, 4);
+      return str;
     },
     parseContent() {
-      const base64Msg = this.showContent.split(this.msgCode + '-')[1]
+      const base64Msg = this.showContent.split(this.msgCode + "-")[1];
       const decodedString = window.atob(base64Msg);
-      const parseString = JSON.parse(decodedString)
-      return parseString
+      const parseString = JSON.parse(decodedString);
+      return parseString;
     },
     getSid() {
-      return chatviewStore.getSid
+      return chatviewStore.getSid;
     },
     getMessageTime() {
-      return chatviewStore.getMessageTime
+      return chatviewStore.getMessageTime;
     },
     // ...mapGetters('content', ['getSid', 'getMessageTime']),
     timeMessage() {
@@ -237,7 +362,7 @@ export default {
       //     sameElse: 'YYYY-MM-DD HH:mm'
       //   });
       // }
-      return '';
+      return "";
     },
     im() {
       return mainStore.getIm;
@@ -249,18 +374,18 @@ export default {
     isSelf() {
       const uid = this.im.userManage.getUid();
       const cid = numToString(this.message.from);
-      return cid + '' === uid + '';
+      return cid + "" === uid + "";
     },
     userObj() {
       const cuid = this.im.userManage.getUid();
       const umaps = this.im.rosterManage.getAllRosterDetail();
       const fromUid = toNumber(this.message.from);
       const fromUserObj = umaps[fromUid] || {};
-      let username = fromUserObj.username || '';
+      let username = fromUserObj.username || "";
       let avatar = this.im.sysManage.getImage({ avatar: fromUserObj.avatar });
 
       if (fromUid === cuid) {
-        username = '我';
+        username = "我";
       } else if (0 == fromUid) {
         username = this.system_roster.name;
         avatar = this.system_roster.avatar;
@@ -270,7 +395,7 @@ export default {
 
     attachUrl() {
       const attach = this.message.attach || {};
-      const { url = '' } = attach;
+      const { url = "" } = attach;
 
       return this.im.sysManage.getChatFile({ url });
     },
@@ -293,7 +418,7 @@ export default {
     },
 
     videoImage() {
-      const attachment = this.message.attach || '{}';
+      const attachment = this.message.attach || "{}";
       const { url, tUrl } = attachment;
       if (tUrl && tUrl.length) {
         return this.getImage({ url: tUrl, thumbnail: true });
@@ -313,12 +438,13 @@ export default {
         //"lat":39.90374,"lon":116.397827,"addr":"天安门广场
         //title必须跟坐标对应，否则不出东西。。
         //url = 'http://map.baidu.com/?latlng=' + attachObj.lat + ',' + attachObj.lon + '&title=' + attachObj.addr + '&content=' + attachObj.addr + '&autoOpen=true';
-        loc.url = 'http://map.baidu.com/?latlng=' + attachObj.lat + ',' + attachObj.lon;
+        loc.url =
+          "http://map.baidu.com/?latlng=" + attachObj.lat + "," + attachObj.lon;
       }
       return loc;
     },
     attachName() {
-      const attachment = this.message.attach || '{}';
+      const attachment = this.message.attach || "{}";
       let attachObj = {};
       try {
         attachObj = JSONBigString.parse(attachment);
@@ -328,7 +454,7 @@ export default {
       if (attachObj.dName) {
         return attachObj.dName;
       }
-      return '文件附件';
+      return "文件附件";
     },
 
     messageStatus() {
@@ -339,18 +465,62 @@ export default {
 
       // status will be unread / delivered / read
       return this.im.sysManage.getMessageStatus(cid, this.message.id);
-    }
+    },
   },
 
   methods: {
+    async call() {
+      console.log("打开视频通话弹窗");
+      this.visible = true;
+      this.$nextTick(async () => {
+        // 例如：创建Web客户端实例
+        const client = DingRTC.createClient();
+
+        await client.join(this.joinInfo);
+        // 摄像头轨道
+        const cameraTrack = await DingRTC.createCameraVideoTrack({
+          frameRate: 15,
+          dimension: "VD_1280x720",
+        });
+        // 麦克风轨道
+        console.log("this.$refs.local", this.$refs.local);
+        const micTrack = await DingRTC.createMicrophoneAudioTrack();
+        console.log("this.$refs.local-end", this.$refs.local);
+        cameraTrack.play(this.$refs.local);
+        micTrack.play();
+        // client.publish([cameraTrack, micTrack]);
+      });
+    },
+    openModal() {
+      this.visible = true;
+      navigator.mediaDevices
+        .getUserMedia({ video: true, audio: true })
+        .then((stream) => {
+          this.stream = stream;
+          this.$refs.videoPlayer.srcObject = stream;
+        })
+        .catch((error) => {
+          console.error("无法访问用户媒体设备:", error);
+        });
+    },
+    closeModal() {
+      this.visible = false;
+      if (this.stream) {
+        this.stream.getTracks().forEach((track) => track.stop());
+        this.stream = null;
+      }
+    },
     trimMatchingQuotes(str) {
       // 检查字符串开头结尾是否有相同的引号，并删除它们
-      if ((str.startsWith('"') && str.endsWith('"')) || (str.startsWith("'") && str.endsWith("'"))) {
+      if (
+        (str.startsWith('"') && str.endsWith('"')) ||
+        (str.startsWith("'") && str.endsWith("'"))
+      ) {
         return str.slice(1, -1);
       }
       return str;
     },
-    getImage({ url = '', thumbnail = true }) {
+    getImage({ url = "", thumbnail = true }) {
       if (!url) {
         const attach = this.message.attach || {};
         url = attach.url;
@@ -363,16 +533,16 @@ export default {
       if (image) {
         this.openImage(image);
       } else {
-        alert('附件错误..');
+        alert("附件错误..");
       }
     },
     playAudio() {
       const url = this.attachAudio;
       if (!url) {
-        alert('url为空，不能播放');
+        alert("url为空，不能播放");
         return;
       }
-      const au = document.querySelector('#audio_player');
+      const au = document.querySelector("#audio_player");
       au.src = url;
       au.play();
     },
@@ -381,8 +551,8 @@ export default {
       return new Promise((resolve) => {
         const xhr = new XMLHttpRequest();
 
-        xhr.open('GET', url, true);
-        xhr.responseType = 'blob';
+        xhr.open("GET", url, true);
+        xhr.responseType = "blob";
         xhr.onload = () => {
           if (xhr.status === 200) {
             resolve(xhr.response);
@@ -407,7 +577,7 @@ export default {
         //   link.click();
         // });
       } else {
-        alert('附件错误..');
+        alert("附件错误..");
       }
     },
     openLocation() {
@@ -419,7 +589,7 @@ export default {
       this.im.rosterManage.deleteMessage(this.getSid, idStr);
     },
     forwardMessage() {
-      forwardStore.actionRecordForwardMessage(this.message)
+      forwardStore.actionRecordForwardMessage(this.message);
       // this.$store.dispatch('forward/actionRecordForwardMessage', this.message);
     },
     recallMessage() {
@@ -434,15 +604,15 @@ export default {
     getVideo(cover = false) {
       let url = this.attachUrl;
       if (cover) {
-        url += '&imgage_type=3';
+        url += "&imgage_type=3";
       }
       return url;
     },
 
     openImage(url) {
-      layerStore.actionSetShowing('image')
-      layerStore.actionSetShowmask(true)
-      layerStore.actionSetImageUrl(url)
+      layerStore.actionSetShowing("image");
+      layerStore.actionSetShowmask(true);
+      layerStore.actionSetImageUrl(url);
       // this.$store.dispatch('layer/actionSetShowing', 'image');
       // this.$store.dispatch('layer/actionSetShowmask', true);
       // this.$store.dispatch('layer/actionSetImageUrl', url);
@@ -450,9 +620,9 @@ export default {
 
     playVideo() {
       let attachUrl = this.attachUrl;
-      layerStore.actionSetShowing('video')
-      layerStore.actionSetShowmask(true)
-      layerStore.actionSetVideoUrl(attachUrl)
+      layerStore.actionSetShowing("video");
+      layerStore.actionSetShowmask(true);
+      layerStore.actionSetVideoUrl(attachUrl);
       // this.$store.dispatch('layer/actionSetShowing', 'video');
       // this.$store.dispatch('layer/actionSetShowmask', true);
       // this.$store.dispatch('layer/actionSetVideoUrl', attachUrl);
@@ -460,7 +630,8 @@ export default {
 
     /* eslint-disable no-useless-escape */
     isMarkdownFormat(str) {
-      const regex = /^\s*(\#+|\*|\-|\d+\.)\s+.+|\!\[.*\]\(.*\)|\`{3}[\w\W]*?\`{3}/gm;
+      const regex =
+        /^\s*(\#+|\*|\-|\d+\.)\s+.+|\!\[.*\]\(.*\)|\`{3}[\w\W]*?\`{3}/gm;
       if (!regex.test(str)) {
         const hasTitle = /^\s*\#+\s+.+$/gm.test(str);
         const hasLink = /\[.*\]\(.*\)/gm.test(str);
@@ -474,7 +645,17 @@ export default {
         const hasUnorderedList = /^(\s*[-+*]\s+.+\n?)+/gm.test(str);
         const hasOrderedList = /^(\s*\d+\.\s+.+\n?)+/gm.test(str);
         return (
-          hasLink || hasTitle || hasItalic || hasImage || hasbold || hasStrikethrough || hasBlockquote || hasInlineCodeBlock || hasPartingLine || hasUnorderedList || hasOrderedList
+          hasLink ||
+          hasTitle ||
+          hasItalic ||
+          hasImage ||
+          hasbold ||
+          hasStrikethrough ||
+          hasBlockquote ||
+          hasInlineCodeBlock ||
+          hasPartingLine ||
+          hasUnorderedList ||
+          hasOrderedList
         );
       } else {
         return true;
@@ -488,27 +669,30 @@ export default {
     changeShowMarkdownFormat() {
       this.showMarkdown = !this.showMarkdown;
       if (this.showMarkdown) {
-        this.showMarkdownTitle = ' 显示原文 ';
+        this.showMarkdownTitle = " 显示原文 ";
       } else {
-        this.showMarkdownTitle = ' 解析格式 ';
+        this.showMarkdownTitle = " 解析格式 ";
       }
     },
 
     changeShowExt() {
       this.showExt = !this.showExt;
       if (this.showExt) {
-        this.showExtTitle = ' 隐藏扩展 ';
+        this.showExtTitle = " 隐藏扩展 ";
       } else {
-        this.showExtTitle = ' 扩展信息 ';
+        this.showExtTitle = " 扩展信息 ";
       }
     },
 
     parseMarkdownContent(content) {
       let newContent = this.marked.parse(content);
       if (this.addHlgs) {
-        newContent = newContent.replaceAll('<code', '<code class="hljs"');
+        newContent = newContent.replaceAll("<code", '<code class="hljs"');
       } else {
-        newContent = newContent.replaceAll('<pre><code', '<pre><code class="hljs"');
+        newContent = newContent.replaceAll(
+          "<pre><code",
+          '<pre><code class="hljs"'
+        );
       }
       return newContent;
     },
@@ -525,15 +709,15 @@ export default {
             let that = this;
             this.marked = new Marked(
               markedHighlight({
-                langPrefix: 'hljs language-',
+                langPrefix: "hljs language-",
                 highlight(code, lang) {
-                  let language = hljs.getLanguage(lang) ? lang : 'plaintext';
-                  if (language === 'plaintext') {
+                  let language = hljs.getLanguage(lang) ? lang : "plaintext";
+                  if (language === "plaintext") {
                     that.addHlgs = true;
                     return hljs.highlightAuto(code).value;
                   }
                   return hljs.highlight(code, { language }).value;
-                }
+                },
               })
             );
           } else {
@@ -573,7 +757,8 @@ export default {
         this.appendTimer && clearInterval(this.appendTimer);
         //每一次计时周期增加一个字符展示。
         let count = 1;
-        let period = (ext.ai.stream_interval * 1000) / this.appendContent.length;
+        let period =
+          (ext.ai.stream_interval * 1000) / this.appendContent.length;
         if (period < 40) {
           period = 40;
           if (showAll && period * this.showAppendContent.length > 20 * 1000) {
@@ -581,7 +766,9 @@ export default {
           }
         }
         if (showAll) {
-          this.lastSliceStreamTime = Math.ceil((period * this.showAppendContent.length) / (1000 * count));
+          this.lastSliceStreamTime = Math.ceil(
+            (period * this.showAppendContent.length) / (1000 * count)
+          );
         }
         let that = this;
         this.appendTimer = setInterval(() => {
@@ -608,7 +795,8 @@ export default {
         this.appendMarkdownTimer && clearInterval(this.appendMarkdownTimer);
         //每一次计时周期增加一个字符展示。
         let count = 1;
-        let period = (ext.ai.stream_interval * 1000) / this.showAppendContent.length;
+        let period =
+          (ext.ai.stream_interval * 1000) / this.showAppendContent.length;
         if (period < 40) {
           period = 40;
           if (showAll && period * this.showAppendContent.length > 20 * 1000) {
@@ -616,21 +804,27 @@ export default {
           }
         }
         if (showAll) {
-          this.lastMarkdownSliceStreamTime = Math.ceil((period * this.showAppendContent.length) / (1000 * count));
+          this.lastMarkdownSliceStreamTime = Math.ceil(
+            (period * this.showAppendContent.length) / (1000 * count)
+          );
         }
         let that = this;
         this.appendMarkdownTimer = setInterval(() => {
           if (that.showAppendContent.length <= 0) {
             clearInterval(that.appendMarkdownTimer);
             that.appendMarkdownTimer = null;
-            that.showMarkdownContent = that.parseMarkdownContent(that.showTotalContent);
+            that.showMarkdownContent = that.parseMarkdownContent(
+              that.showTotalContent
+            );
             if (showAll) {
               that.showContent = content;
             }
           } else {
             that.showTotalContent += that.showAppendContent.slice(0, count);
             that.showAppendContent = that.showAppendContent.slice(count);
-            that.showMarkdownContent = that.parseMarkdownContent(that.showTotalContent);
+            that.showMarkdownContent = that.parseMarkdownContent(
+              that.showTotalContent
+            );
           }
         }, period);
       } else {
@@ -639,7 +833,10 @@ export default {
     },
 
     getLastSliceStreamTime() {
-      return Math.max(this.lastSliceStreamTime, this.lastMarkdownSliceStreamTime);
+      return Math.max(
+        this.lastSliceStreamTime,
+        this.lastMarkdownSliceStreamTime
+      );
     },
 
     messageContentAppend(message) {
@@ -651,7 +848,9 @@ export default {
       }
       if (message.ext && message.ext.length && this.isAIStream(message.ext)) {
         if (this.isMarkdown) {
-          this.showAppendContent = message.content.slice(this.showTotalContent.length);
+          this.showAppendContent = message.content.slice(
+            this.showTotalContent.length
+          );
           this.calculateMarkdownAppend(message.content, message.ext);
         }
         this.appendContent = message.content.slice(this.showContent.length);
@@ -671,9 +870,16 @@ export default {
         this.showTotalContent = this.showContent;
         this.showMarkdownContent = this.parseMarkdownContent(this.showContent);
       }
-      if (!message.isHistory && message.ext && message.ext.length && this.isAIStream(message.ext)) {
+      if (
+        !message.isHistory &&
+        message.ext &&
+        message.ext.length &&
+        this.isAIStream(message.ext)
+      ) {
         if (this.isMarkdown) {
-          this.showAppendContent = message.content.slice(this.showTotalContent.length);
+          this.showAppendContent = message.content.slice(
+            this.showTotalContent.length
+          );
           this.calculateMarkdownAppend(message.content, message.ext, true);
         }
         this.appendContent = message.content.slice(this.showContent.length);
@@ -684,10 +890,45 @@ export default {
         }
         this.showContent = this.content;
       }
-    }
-  }
+    },
+  },
 };
 </script>
+<style scoped>
+.video-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 10000;
+}
+
+video {
+  max-width: 100%;
+  max-height: 80vh;
+}
+</style>
 <style scoped lang="scss">
 .ext-con-box {
   min-width: 360px;
@@ -707,15 +948,15 @@ export default {
   .waiting {
     font-weight: 500;
     font-size: 20px;
-    color: #8F56F1;
+    color: #8f56f1;
     margin-top: 15px;
   }
   .btn {
-    color: #8F56F1;
+    color: #8f56f1;
     width: 110px;
     height: 40px;
     border-radius: 4px;
-    border: 1px solid #8F56F1;
+    border: 1px solid #8f56f1;
     background: #fff;
     cursor: pointer;
     margin-top: 20px;
@@ -736,7 +977,7 @@ export default {
     margin-top: 15px;
   }
   .drug-con {
-    background: #F8F7FA;
+    background: #f8f7fa;
     padding: 15px;
     margin: 15px 0;
   }
