@@ -92,7 +92,8 @@ export default {
       const toUid = toNumber(message.to);
       const uid = mainStore.getIm.userManage.getUid();
       const au = document.querySelector('#phone_ring_player');
-      const callStatus = mainStore.getIm.rtcManage.getInCallStatus();
+      // const callStatus = mainStore.getIm.rtcManage.getInCallStatus(); //排查一下问题 或者记得改回来
+      const callStatus = false;
 
       if (!isHistory && config && !isNative) {
         if (config.action && config.action === 'call' && config.initiator) {

@@ -210,7 +210,12 @@
       <div class="modal-overlay" @click="closeModal"></div>
       <div class="modal-content">
         <!-- <video ref="videoPlayer" autoplay></video> -->
-        <div ref="local"></div>
+        <div
+          style="display: flex; align-items: center; justify-content: center"
+        >
+          <div ref="local" style="width: 600px; height: 400px"></div>
+          <div ref="userLocal" style="width: 600px; height: 400px"></div>
+        </div>
         <el-button @click="closeModal">关闭</el-button>
       </div>
     </div>
@@ -278,9 +283,21 @@ export default {
         channel: 123,
         userName: "test",
       },
+      client: null,
+      cameraTrack: null,
+      micTrack: null,
     };
   },
   mounted() {
+    // 例如：创建Web客户端实例
+    this.client = DingRTC.createClient();
+    for (const user of this.client.remoteUsers) {
+      if (user.hasVideo) {
+        client.subscribe(user.userId, "video").then((track) => {
+          track.play(this.$refs.userLocal);
+        });
+      }
+    }
     const im = mainStore.getIm;
     if (!im) return;
 
@@ -469,47 +486,64 @@ export default {
   },
 
   methods: {
-    async call() {
+    call() {
       console.log("打开视频通话弹窗");
-      this.visible = true;
       this.$nextTick(async () => {
         // 例如：创建Web客户端实例
-        const client = DingRTC.createClient();
-
-        await client.join(this.joinInfo);
+        await this.client.join(this.joinInfo);
         // 摄像头轨道
-        const cameraTrack = await DingRTC.createCameraVideoTrack({
+        this.cameraTrack = await DingRTC.createCameraVideoTrack({
           frameRate: 15,
           dimension: "VD_1280x720",
         });
         // 麦克风轨道
-        console.log("this.$refs.local", this.$refs.local);
-        const micTrack = await DingRTC.createMicrophoneAudioTrack();
-        console.log("this.$refs.local-end", this.$refs.local);
-        cameraTrack.play(this.$refs.local);
-        micTrack.play();
-        // client.publish([cameraTrack, micTrack]);
+        this.micTrack = await DingRTC.createMicrophoneAudioTrack();
+        this.visible = true;
+        this.cameraTrack.play(this.$refs.local);
+        this.micTrack.play();
+        this.client.publish([this.cameraTrack, this.micTrack]);
       });
     },
     openModal() {
-      this.visible = true;
-      navigator.mediaDevices
-        .getUserMedia({ video: true, audio: true })
-        .then((stream) => {
-          this.stream = stream;
-          this.$refs.videoPlayer.srcObject = stream;
-        })
-        .catch((error) => {
-          console.error("无法访问用户媒体设备:", error);
-        });
+      // this.visible = true;
+      // navigator.mediaDevices
+      //   .getUserMedia({ video: true, audio: true })
+      //   .then((stream) => {
+      //     this.stream = stream;
+      //     this.$refs.videoPlayer.srcObject = stream;
+      //   })
+      //   .catch((error) => {
+      //     console.error("无法访问用户媒体设备:", error);
+      //   });
     },
     closeModal() {
       this.visible = false;
-      if (this.stream) {
-        this.stream.getTracks().forEach((track) => track.stop());
-        this.stream = null;
-      }
+      this.client.unpublish([this.cameraTrack, this.micTrack]);
+      this.client.unsubscribe("", "video"); // 取消订阅用户的视频轨道
+      this.client.unsubscribe("", "audio"); // 取消订阅用户的音频轨道
+      this.client.leave();
+
+      // 调用关闭摄像头的函数
+      this.closeCameraStreams();
+      // if (this.stream) {
+      //   this.stream.getTracks().forEach((track) => track.stop());
+      //   this.stream = null;
+      // }
     },
+    async closeCameraStreams() {
+      const streams = await navigator.mediaDevices.getUserMedia({
+        video: true,
+      });
+
+      const tracks = streams.getVideoTracks();
+
+      tracks.forEach((track) => {
+        track.stop();
+      });
+
+      console.log("Camera streams closed.");
+    },
+
     trimMatchingQuotes(str) {
       // 检查字符串开头结尾是否有相同的引号，并删除它们
       if (
