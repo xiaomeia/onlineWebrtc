@@ -206,15 +206,15 @@
     <div v-if="messageType===4">
       renderUserNotice
     </div> -->
-    <div class="video-modal" v-show="visible">
+    <div class="video-modal" v-if="visible && msgCode === '1002'">
       <div class="modal-overlay" @click="closeModal"></div>
       <div class="modal-content">
         <!-- <video ref="videoPlayer" autoplay></video> -->
         <div
           style="display: flex; align-items: center; justify-content: center"
         >
-          <div ref="local" style="width: 600px; height: 400px"></div>
-          <div ref="userLocal" style="width: 600px; height: 400px"></div>
+          <div ref="local" id="local" style="width: 600px; height: 400px"></div>
+          <div ref="userLocal" id="userLocal" style="width: 600px; height: 400px"></div>
         </div>
         <el-button @click="closeModal">关闭</el-button>
       </div>
@@ -473,9 +473,28 @@ export default {
       // status will be unread / delivered / read
       return this.im.sysManage.getMessageStatus(cid, this.message.id);
     },
+    getVideoShow() {
+      return mainStore.getVideoShow;
+    }
+  },
+  watch: {
+    getVideoShow(val) {
+      if (this.msgCode !== '1002') {
+        return;
+      }
+      if (val) {
+        this.visible = true;
+        this.callVisible();
+      } else {
+        this.visible = false;
+      }
+    }
   },
   methods: {
     call() {
+      mainStore.actionSetVideoShow(true);
+    },
+    callVisible() {
       console.log("打开视频通话弹窗");
       this.$nextTick(async () => {
         // 摄像头轨道
@@ -485,10 +504,13 @@ export default {
         });
         // 麦克风轨道
         this.micTrack = await DingRTC.createMicrophoneAudioTrack();
-        this.visible = true;
-        this.cameraTrack.play(this.$refs.local);
-        this.micTrack.play();
-        mainStore.getClient.publish([this.cameraTrack, this.micTrack]);
+        // this.visible = true;
+        setTimeout(() => {
+          // this.cameraTrack.play(this.$refs.local);
+          this.cameraTrack.play('#local');
+          this.micTrack.play();
+          mainStore.getClient.publish([this.cameraTrack, this.micTrack]);
+        }, 3000)
       });
     },
     openModal() {
@@ -504,11 +526,12 @@ export default {
       //   });
     },
     closeModal() {
-      this.visible = false;
+      // this.visible = false;
+      mainStore.actionSetVideoShow(false);
       mainStore.getClient.unpublish([this.cameraTrack, this.micTrack]);
       mainStore.getClient.unsubscribe("", "video"); // 取消订阅用户的视频轨道
       mainStore.getClient.unsubscribe("", "audio"); // 取消订阅用户的音频轨道
-      mainStore.getClient.leave();
+      // mainStore.getClient.leave();
 
       // 调用关闭摄像头的函数
       this.closeCameraStreams();
@@ -934,7 +957,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .modal-content {
