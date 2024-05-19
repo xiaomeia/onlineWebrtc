@@ -221,7 +221,6 @@
     </div>
   </div>
 </template>
-
 <script>
 // import Chat from "./chat.vue";
 // import Inputer from "./inputer.vue";
@@ -289,15 +288,6 @@ export default {
     };
   },
   mounted() {
-    // 例如：创建Web客户端实例
-    this.client = DingRTC.createClient();
-    for (const user of this.client.remoteUsers) {
-      if (user.hasVideo) {
-        client.subscribe(user.userId, "video").then((track) => {
-          track.play(this.$refs.userLocal);
-        });
-      }
-    }
     const im = mainStore.getIm;
     if (!im) return;
 
@@ -484,13 +474,10 @@ export default {
       return this.im.sysManage.getMessageStatus(cid, this.message.id);
     },
   },
-
   methods: {
     call() {
       console.log("打开视频通话弹窗");
       this.$nextTick(async () => {
-        // 例如：创建Web客户端实例
-        await this.client.join(this.joinInfo);
         // 摄像头轨道
         this.cameraTrack = await DingRTC.createCameraVideoTrack({
           frameRate: 15,
@@ -501,7 +488,7 @@ export default {
         this.visible = true;
         this.cameraTrack.play(this.$refs.local);
         this.micTrack.play();
-        this.client.publish([this.cameraTrack, this.micTrack]);
+        mainStore.getClient.publish([this.cameraTrack, this.micTrack]);
       });
     },
     openModal() {
@@ -518,10 +505,10 @@ export default {
     },
     closeModal() {
       this.visible = false;
-      this.client.unpublish([this.cameraTrack, this.micTrack]);
-      this.client.unsubscribe("", "video"); // 取消订阅用户的视频轨道
-      this.client.unsubscribe("", "audio"); // 取消订阅用户的音频轨道
-      this.client.leave();
+      mainStore.getClient.unpublish([this.cameraTrack, this.micTrack]);
+      mainStore.getClient.unsubscribe("", "video"); // 取消订阅用户的视频轨道
+      mainStore.getClient.unsubscribe("", "audio"); // 取消订阅用户的音频轨道
+      mainStore.getClient.leave();
 
       // 调用关闭摄像头的函数
       this.closeCameraStreams();

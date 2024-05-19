@@ -107,7 +107,7 @@ export default {
     };
   },
   mounted() {
-    const im = mainStore.getIm;
+    const im = proxy.flooIm;
     if (!im) return;
 
     im.on('onGroupMessageContentAppend', (message) => {
@@ -128,9 +128,9 @@ export default {
 
     // Message displayed as read
     const fromUid = toNumber(this.message.from);
-    const uid = mainStore.getIm.userManage.getUid();
+    const uid = proxy.flooIm.userManage.getUid();
     if (fromUid !== uid) {
-      const im = mainStore.getIm;
+      const im = proxy.flooIm;
       if (im) im.groupManage.readGroupMessage(this.getSid, this.message.id);
     }
 

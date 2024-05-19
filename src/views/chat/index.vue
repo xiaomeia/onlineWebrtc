@@ -18,6 +18,7 @@ import { toNumber } from '@/utils/index';
 import { useCollectionStore } from '@/store/modules/contact';
 import { useLayerStore } from '@/store/modules/layer';
 import { useMainStore } from "@/store/modules/index";
+import DingRTC from "dingrtc";
 
 const mainStore = useMainStore();
 const layerStore = useLayerStore()
@@ -45,7 +46,7 @@ export default {
       return layerStore.getShowmask;
     }
   },
-  mounted() {
+  async mounted() {
     console.log('test--------------------------------', this.$root.$options.flooIm)
     const collectionStore = useCollectionStore();
     const layersStore = useLayerStore();
@@ -176,6 +177,43 @@ export default {
           }
         }
       }
+    });
+
+    mainStore.actionSetClient(DingRTC.createClient())
+    this.client = DingRTC.createClient();
+
+    const joinInfo = {
+        appId: "49idbu4a",
+        token:
+          "000eJxjYGBQMKh45eNovi3yTJY0twxnKZfX0WUrHSaxMmhr/fW/f6BkLQMDA4eJZWZKUqlJYprn9LObTjecSfN66QsUZzY0MgZSjIYMjAyjYAgCAJPjF1g=",
+        uid: 1,
+        channel: 123,
+        userName: "test",
+    };
+    // 例如：创建Web客户端实例
+    await this.client.join(joinInfo);
+    // for (const user of this.client.remoteUsers) {
+    //   if (user.hasVideo) {
+    //     client.subscribe(user.userId, "video").then((track) => {
+    //       track.play(this.$refs.userLocal);
+    //     });
+    //   }
+    // }
+    mainStore.getClient.on('user-joined', (data) => {
+      console.log('data-test', data);
+    });
+    mainStore.getClient.on('user-published', (user, mediaType, auxiliary) => {
+      console.log('user-published----------------------------------test', user, mediaType, auxiliary)
+      mainStore.getClient.subscribe('mcu', mediaType, auxiliary).then((track) => {
+        // track.play(`#uid${user.userId}`);
+        console.log('track----------------------------------------------test', track)
+        track.play(this.$refs.userLocal);
+        // 进来判断那个视频聊天的窗口没有打开，打开它
+      });
+    });
+    mainStore.getClient.on('user-left', (user) => {
+      console.log('离开', user)
+      // track.stop();
     });
   },
   methods: {
